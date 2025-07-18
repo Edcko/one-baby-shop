@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "name": "Pañales Premium",
+    "description": "Pañales ultra absorbentes para bebés de 0-6 meses",
+    "price": 29.99,
+    "category": "Pañales",
+    "image": "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=300&h=300&fit=crop",
+    "rating": 4.5,
+    "reviewCount": 128
+  },
+  {
+    "id": 2,
+    "name": "Ropa Interior Bebé",
+    "description": "Pack de 5 bodys de algodón 100% orgánico",
+    "price": 24.50,
+    "category": "Ropa",
+    "image": "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=300&fit=crop",
+    "rating": 4.8,
+    "reviewCount": 89
+  },
+  {
+    "id": 3,
+    "name": "Juguete Educativo",
+    "description": "Pelota texturizada para estimulación sensorial",
+    "price": 15.99,
+    "category": "Juguetes",
+    "image": "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=300&h=300&fit=crop",
+    "rating": 4.2,
+    "reviewCount": 56
+  },
+  {
+    "id": 4,
+    "name": "Biberón Anti-cólicos",
+    "description": "Biberón con sistema anti-cólicos y anti-reflujo",
+    "price": 18.75,
+    "category": "Alimentación",
+    "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop",
+    "rating": 4.6,
+    "reviewCount": 203
+  },
+  {
+    "id": 5,
+    "name": "Toallitas Húmedas",
+    "description": "Pack de 80 toallitas hipoalergénicas sin fragancia",
+    "price": 12.99,
+    "category": "Higiene",
+    "image": "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=300&h=300&fit=crop",
+    "rating": 4.4,
+    "reviewCount": 145
+  },
+  {
+    "id": 6,
+    "name": "Manta de Algodón",
+    "description": "Manta suave y cálida para arrullar a tu bebé",
+    "price": 32.00,
+    "category": "Ropa",
+    "image": "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=300&fit=crop",
+    "rating": 4.7,
+    "reviewCount": 67
+  },
+  {
+    "id": 7,
+    "name": "Sonajero Musical",
+    "description": "Sonajero con luces y música para estimular al bebé",
+    "price": 22.50,
+    "category": "Juguetes",
+    "image": "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=300&h=300&fit=crop",
+    "rating": 4.3,
+    "reviewCount": 78
+  },
+  {
+    "id": 8,
+    "name": "Crema para Pañal",
+    "description": "Crema protectora para prevenir irritaciones",
+    "price": 8.99,
+    "category": "Higiene",
+    "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop",
+    "rating": 4.1,
+    "reviewCount": 92
+  }
+] 

@@ -46,7 +46,7 @@ Una aplicación e-commerce moderna y completa desarrollada con Vue 3, Vite y Tai
 
 1. **Clonar el repositorio**
 ```bash
-git clone https://github.com/tu-usuario/one-baby-shop.git
+git clone https://github.com/Edcko/one-baby-shop.git
 cd one-baby-shop
 ```
 
@@ -177,13 +177,8 @@ npm run lint
 
 ### Variables de Entorno
 ```env
-# Desarrollo
 VITE_APP_TITLE=One Baby Shop
 VITE_APP_API_URL=http://localhost:3000/api
-
-# Producción
-VITE_APP_TITLE=One Baby Shop
-VITE_APP_API_URL=https://api.onebabyshop.com
 ```
 
 ### DevTools
@@ -207,7 +202,7 @@ Para configurar los métodos de pago:
    - Reemplazar en `src/pages/Checkout.vue`
 
 ### Backend Integration
-Para conectar con un backend:
+Este proyecto funciona como frontend standalone con datos mock en localStorage. Para conectar con un backend real:
 
 1. **Configurar API endpoints** en los stores
 2. **Reemplazar localStorage** por llamadas a API
@@ -285,10 +280,7 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 ## 📞 Soporte
 
-### Contacto
-- **Email**: soporte@onebabyshop.com
-- **Documentación**: [docs.onebabyshop.com](https://docs.onebabyshop.com)
-- **Issues**: [GitHub Issues](https://github.com/tu-usuario/one-baby-shop/issues)
+Para soporte, abre un issue en este repositorio.
 
 ### Recursos Adicionales
 - [Vue 3 Documentation](https://vuejs.org/)

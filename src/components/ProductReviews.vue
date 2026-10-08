@@ -5,7 +5,7 @@
     <!-- Resumen de valoraciones -->
     <div class="flex items-center space-x-4">
       <div class="text-center">
-        <div class="text-3xl font-bold text-primary">{{ averageRating }}</div>
+        <div class="text-3xl font-bold text-primary-700">{{ averageRating }}</div>
         <div class="flex justify-center mt-1">
           <span v-for="i in 5" :key="i" class="text-yellow-400">
             <svg

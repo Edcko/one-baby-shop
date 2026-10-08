@@ -1,5 +1,7 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <!-- Guards: null while loading, false when not found (was a runtime crash:
+       template read product.id.toString() before the async data resolved). -->
+  <div v-if="product" class="min-h-screen bg-gray-50 py-8">
     <div class="container mx-auto px-4">
       <div class="bg-white rounded-lg shadow-lg overflow-hidden">
         <!-- Breadcrumb -->
@@ -7,7 +9,7 @@
           <nav class="flex" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3">
               <li class="inline-flex items-center">
-                <RouterLink to="/" class="text-gray-700 hover:text-primary">Inicio</RouterLink>
+                <RouterLink to="/" class="text-gray-700 hover:text-primary-700">Inicio</RouterLink>
               </li>
               <li>
                 <div class="flex items-center">
@@ -18,7 +20,7 @@
                       clip-rule="evenodd"
                     ></path>
                   </svg>
-                  <RouterLink to="/catalog" class="text-gray-700 hover:text-primary"
+                  <RouterLink to="/catalog" class="text-gray-700 hover:text-primary-700"
                     >Catálogo</RouterLink
                   >
                 </div>
@@ -76,7 +78,7 @@
 
             <!-- Precio -->
             <div class="flex items-center space-x-4">
-              <span class="text-3xl font-bold text-primary">${{ product.price }}</span>
+              <span class="text-3xl font-bold text-primary-700">${{ product.price }}</span>
               <span v-if="product.originalPrice" class="text-xl text-gray-500 line-through"
                 >${{ product.originalPrice }}</span
               >
@@ -139,6 +141,20 @@
       </div>
     </div>
   </div>
+
+  <!-- Not found -->
+  <div v-else-if="loaded" class="min-h-screen bg-gray-50 flex items-center justify-center py-8">
+    <div class="text-center">
+      <h1 class="text-2xl font-heading font-bold text-gray-800 mb-2">Producto no encontrado</h1>
+      <p class="text-gray-600 mb-6">El producto que buscas no existe o ya no está disponible.</p>
+      <RouterLink
+        to="/catalog"
+        class="inline-block px-6 py-2 rounded-lg bg-primary-600 text-white font-bold hover:bg-primary-700 transition-colors"
+      >
+        Ir al catálogo
+      </RouterLink>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -147,13 +163,14 @@ import { useRoute } from 'vue-router'
 import ProductReviews from '@/components/ProductReviews.vue'
 
 const route = useRoute()
-const product = ref({})
+// null = loading, object = loaded, false = not found
+const product = ref(null)
+const loaded = ref(false)
 
 onMounted(async () => {
-  // Simulación de carga de producto
-  // En producción, esto vendría de una API
   const products = await import('@/data/products.json')
   const productId = parseInt(route.params.id)
-  product.value = products.default.find((p) => p.id === productId) || {}
+  product.value = products.default.find((p) => p.id === productId) ?? false
+  loaded.value = true
 })
 </script>

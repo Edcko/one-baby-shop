@@ -8,15 +8,15 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-white p-6 rounded shadow">
           <h3 class="font-heading font-bold text-lg mb-2">Total Productos</h3>
-          <p class="text-3xl text-primary">24</p>
+          <p class="text-3xl text-primary-700">24</p>
         </div>
         <div class="bg-white p-6 rounded shadow">
           <h3 class="font-heading font-bold text-lg mb-2">Pedidos Pendientes</h3>
-          <p class="text-3xl text-primary">8</p>
+          <p class="text-3xl text-primary-700">8</p>
         </div>
         <div class="bg-white p-6 rounded shadow">
           <h3 class="font-heading font-bold text-lg mb-2">Usuarios Registrados</h3>
-          <p class="text-3xl text-primary">156</p>
+          <p class="text-3xl text-primary-700">156</p>
         </div>
       </div>
     </main>

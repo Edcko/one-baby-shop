@@ -501,6 +501,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useToastStore } from '@/store/toast'
+import { useCartStore } from '@/store/cart'
 import products from '@/data/products.json'
 import ProductCard from '@/components/ProductCard.vue'
 
@@ -511,6 +512,7 @@ const maxPrice = ref(100)
 const sortBy = ref('name')
 const mobileFiltersOpen = ref(false)
 const toastStore = useToastStore()
+const cartStore = useCartStore()
 
 // Categorías disponibles
 const availableCategories = computed(() => {
@@ -563,33 +565,16 @@ const clearFilters = () => {
 }
 
 const addToCart = (product) => {
-  // Obtener carrito actual del localStorage
-  const currentCart = JSON.parse(localStorage.getItem('cart')) || []
+  const isNewLine = cartStore.add(product)
 
-  // Verificar si el producto ya existe en el carrito
-  const existingItem = currentCart.find((item) => item.id === product.id)
-
-  if (existingItem) {
-    // Si ya existe, incrementar cantidad
-    existingItem.quantity += 1
+  if (isNewLine) {
+    toastStore.success('Producto agregado', `${product.name} se agregó correctamente al carrito.`)
+  } else {
     toastStore.success(
       'Producto actualizado',
       `Se agregó otra unidad de ${product.name} al carrito.`
     )
-  } else {
-    // Si no existe, agregar nuevo producto
-    currentCart.push({
-      ...product,
-      quantity: 1,
-    })
-    toastStore.success('Producto agregado', `${product.name} se agregó correctamente al carrito.`)
   }
-
-  // Guardar en localStorage
-  localStorage.setItem('cart', JSON.stringify(currentCart))
-
-  // Emitir evento para actualizar el contador del carrito en el header
-  window.dispatchEvent(new CustomEvent('cart-updated', { detail: currentCart }))
 }
 </script>
 

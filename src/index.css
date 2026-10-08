@@ -4,7 +4,9 @@
 @tailwind utilities;
 
 body {
-  background-color: #f0f4c3;
+  /* Warm neutral surface (stone-50). Was brand pastel #F0F4C3 — a background
+     must never carry the brand color at full strength. */
+  background-color: #fafaf9;
   color: #374151;
   font-family: 'Nunito', sans-serif;
 }

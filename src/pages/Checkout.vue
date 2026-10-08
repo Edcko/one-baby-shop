@@ -43,10 +43,12 @@
 import { ref, watch, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToastStore } from '@/store/toast'
+import { useCartStore } from '@/store/cart'
 
 const paymentMethod = ref('paypal')
 const router = useRouter()
 const toastStore = useToastStore()
+const cartStore = useCartStore()
 
 // Credenciales de ejemplo (reemplaza por las tuyas en producción)
 const PAYPAL_CLIENT_ID = 'sb' // 'sb' es el client-id de sandbox de PayPal
@@ -65,8 +67,7 @@ function loadScript(src, id) {
 }
 
 function limpiarCarrito() {
-  localStorage.removeItem('cart')
-  // Si usas un store de carrito, aquí también lo vacías
+  cartStore.clear()
 }
 
 function pagoExitoso(metodo) {

@@ -1,6 +1,6 @@
 <template>
   <header
-    class="relative bg-gradient-to-r from-primary via-secondary to-accent shadow-lg border-b border-white/20"
+    class="relative bg-gradient-to-r from-primary-700 via-primary-600 to-secondary-600 shadow-lg border-b border-white/20"
   >
     <!-- Elementos decorativos de fondo -->
     <div class="absolute inset-0 bg-black bg-opacity-5"></div>
@@ -33,26 +33,67 @@
 
         <!-- Navegación Desktop mejorada -->
         <nav class="hidden md:flex space-x-8">
-          <RouterLink to="/" class="font-heading hover:text-primary">Inicio</RouterLink>
-          <RouterLink to="/catalog" class="font-heading hover:text-primary">Catálogo</RouterLink>
-          <RouterLink to="/contact" class="font-heading hover:text-primary">Contacto</RouterLink>
+          <RouterLink
+            to="/"
+            class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+            >Inicio</RouterLink
+          >
+          <RouterLink
+            to="/catalog"
+            class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+            >Catálogo</RouterLink
+          >
+          <RouterLink
+            to="/contact"
+            class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+            >Contacto</RouterLink
+          >
 
           <!-- Enlaces para usuarios no autenticados -->
           <template v-if="!userStore.user">
-            <RouterLink to="/login" class="font-heading hover:text-primary">Login</RouterLink>
-            <RouterLink to="/register" class="font-heading hover:text-primary">Registro</RouterLink>
+            <RouterLink
+              to="/login"
+              class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+              >Login</RouterLink
+            >
+            <RouterLink
+              to="/register"
+              class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+              >Registro</RouterLink
+            >
           </template>
 
           <!-- Enlaces para usuarios autenticados -->
           <template v-if="userStore.user">
-            <RouterLink to="/profile" class="font-heading hover:text-primary">Perfil</RouterLink>
-            <RouterLink to="/wishlist" class="font-heading hover:text-primary"
+            <RouterLink
+              to="/profile"
+              class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+              >Perfil</RouterLink
+            >
+            <RouterLink
+              to="/wishlist"
+              class="font-heading text-white/90 hover:text-accent-200 transition-colors"
               >Mis Favoritos</RouterLink
             >
-            <RouterLink to="/checkout" class="font-heading hover:text-primary">Checkout</RouterLink>
-            <RouterLink to="/orders" class="font-heading hover:text-primary">Pedidos</RouterLink>
-            <RouterLink to="/admin/login" class="font-heading hover:text-primary">Admin</RouterLink>
-            <button @click="logout" class="font-heading hover:text-red-500 ml-4">
+            <RouterLink
+              to="/checkout"
+              class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+              >Checkout</RouterLink
+            >
+            <RouterLink
+              to="/orders"
+              class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+              >Pedidos</RouterLink
+            >
+            <RouterLink
+              to="/admin/login"
+              class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+              >Admin</RouterLink
+            >
+            <button
+              @click="logout"
+              class="font-heading text-white/90 hover:text-red-200 transition-colors ml-4"
+            >
               Cerrar sesión
             </button>
           </template>
@@ -62,7 +103,7 @@
         <div class="flex items-center gap-4">
           <!-- Carrito mejorado -->
           <button
-            @click="$emit('toggle-cart')"
+            @click="cartStore.open()"
             class="relative group flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/20"
           >
             <div class="relative">
@@ -82,7 +123,7 @@
               <div
                 class="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-pink-400 to-purple-500 text-white text-xs rounded-full flex items-center justify-center font-bold animate-pulse"
               >
-                {{ cartCount }}
+                {{ cartStore.count }}
               </div>
             </div>
             <span class="hidden md:inline text-white font-medium">Carrito</span>
@@ -189,18 +230,11 @@
 <script setup>
 import { ref } from 'vue'
 import { useUserStore } from '@/store/user'
+import { useCartStore } from '@/store/cart'
 import { useRouter } from 'vue-router'
 
-defineProps({
-  cartCount: {
-    type: Number,
-    default: 0,
-  },
-})
-
-defineEmits(['toggle-cart'])
-
 const userStore = useUserStore()
+const cartStore = useCartStore()
 const router = useRouter()
 
 const mobileMenuOpen = ref(false)

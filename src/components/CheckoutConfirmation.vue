@@ -1,7 +1,7 @@
 <template>
   <div class="text-center py-8">
     <svg
-      class="mx-auto mb-4 w-16 h-16 text-green-500"
+      class="mx-auto mb-4 w-16 h-16 text-amber-500"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -10,19 +10,49 @@
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke-width="2"
-        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-      />
+        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+      ></path>
     </svg>
-    <h2 class="font-heading text-2xl font-bold text-green-600 mb-2">
-      ¡Compra realizada con éxito!
-    </h2>
-    <p class="text-gray-700 mb-4">
-      Gracias por tu compra. Pronto recibirás un email con los detalles de tu pedido.
+
+    <h2 class="font-heading text-2xl font-bold text-gray-800 mb-2">¡Pedido creado!</h2>
+    <p class="text-gray-700 mb-4 max-w-md mx-auto">
+      Tu pedido <span class="font-bold">{{ order.orderNumber }}</span> quedó registrado y está
+      <span class="font-semibold">pendiente de pago</span>.
     </p>
-    <router-link
-      to="/orders"
-      class="inline-block mt-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-300"
-      >Ver mis pedidos</router-link
-    >
+
+    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 max-w-md mx-auto mb-6 text-left">
+      <p class="text-sm text-amber-800">
+        <strong v-if="isAsyncPayment">Tu pago se confirma en cuanto lo realices.</strong>
+        <strong v-else>Reservamos tu inventario por 72 horas.</strong>
+        Si el pago no se concreta en ese plazo, el pedido se cancela automáticamente y el stock
+        regresa a la tienda.
+      </p>
+      <p class="text-2xl font-bold text-gray-900 mt-3">{{ formatMXN(order.totalCents) }}</p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+      <router-link
+        to="/orders"
+        class="inline-block bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg hover:from-primary-700 hover:to-primary-800 transition-all"
+        >Ver mis pedidos</router-link
+      >
+      <router-link
+        to="/catalog"
+        class="inline-block border-2 border-gray-200 text-gray-700 px-6 py-3 rounded-xl font-medium hover:border-primary-300 hover:text-primary-700 transition-all"
+        >Seguir comprando</router-link
+      >
+    </div>
   </div>
 </template>
+
+<script setup>
+import { computed } from 'vue'
+import { formatMXN } from '@/utils/money'
+
+const props = defineProps({
+  order: { type: Object, required: true },
+})
+
+// OXXO/SPEI confirm manually later; card/msi confirm at capture time.
+const isAsyncPayment = computed(() => !['oxxo', 'spei'].includes(props.order.paymentMethod ?? ''))
+</script>

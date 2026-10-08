@@ -20,9 +20,14 @@ export interface AccessTokenPayload {
   type: 'access'
 }
 
+export interface RefreshTokenPayload {
+  sub: number
+  type: 'refresh'
+}
+
 declare module '@fastify/jwt' {
   interface FastifyJWT {
-    payload: AccessTokenPayload
+    payload: AccessTokenPayload | RefreshTokenPayload
     user: AccessTokenPayload
   }
 }
@@ -74,15 +79,18 @@ export default fp(
 /** Signs a refresh JWT with its own secret. Kept here so secrets stay in one module. */
 export function signRefreshToken(fastify: FastifyInstance, userId: number) {
   // @fastify/jwt supports per-call secrets; refresh uses the dedicated one.
-  return fastify.jwt.sign({ sub: userId, type: 'refresh' } as never, {
-    expiresIn: REFRESH_TTL_SECONDS,
-    secret: env.JWT_REFRESH_SECRET,
-  })
+  return fastify.jwt.sign(
+    { sub: userId, type: 'refresh' },
+    {
+      expiresIn: REFRESH_TTL_SECONDS,
+      key: env.JWT_REFRESH_SECRET,
+    }
+  )
 }
 
 export function verifyRefreshToken(fastify: FastifyInstance, token: string) {
-  const payload = fastify.jwt.verify<{ sub: number; type: string }>(token, {
-    secret: env.JWT_REFRESH_SECRET,
+  const payload = fastify.jwt.verify<RefreshTokenPayload>(token, {
+    key: env.JWT_REFRESH_SECRET,
   })
   if (payload.type !== 'refresh') throw new Error('wrong token type')
   return payload

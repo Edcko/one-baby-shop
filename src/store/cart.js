@@ -70,6 +70,17 @@ export const useCartStore = defineStore('cart', () => {
     return false
   }
 
+  /** Replaces local state with the server cart (NO merge). Post-checkout. */
+  async function refreshFromServer() {
+    syncing.value = true
+    try {
+      const response = await api('/cart')
+      await applyServerResponse(response)
+    } finally {
+      syncing.value = false
+    }
+  }
+
   /** Called once right after a successful login/registration. */
   async function syncOnLogin() {
     const guestItems = items.value.map((item) => ({ productId: item.id, quantity: item.quantity }))
@@ -191,5 +202,6 @@ export const useCartStore = defineStore('cart', () => {
     open,
     close,
     syncOnLogin,
+    refreshFromServer,
   }
 })

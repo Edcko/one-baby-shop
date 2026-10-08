@@ -137,11 +137,14 @@ model User {
 
 // Mexican address format + optional fiscal data (CFDI-ready).
 model Address {
-  id               Int      @id @default(autoincrement())
-  userId           Int
-  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  // Domicilio (SEPOMAX vocabulary)
-  street           String
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Shipping contact (courier needs who receives + phone)
+  recipientName   String
+  phone           String
+  // Domicilio (SEPOMEX vocabulary)
+  street          String
   exteriorNumber   String
   interiorNumber   String?
   colonia          String

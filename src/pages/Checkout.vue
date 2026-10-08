@@ -1,161 +1,283 @@
 <template>
-  <div class="max-w-2xl mx-auto py-8 px-4">
-    <h1 class="text-2xl font-bold mb-6">Checkout</h1>
-    <div class="mb-6">
-      <h2 class="text-lg font-semibold mb-2">Selecciona el método de pago</h2>
-      <div class="flex gap-4 mb-4">
-        <button
-          class="px-4 py-2 rounded border focus:outline-none"
+  <div class="max-w-3xl mx-auto py-8 px-4">
+    <h1 class="font-heading text-3xl font-bold text-gray-900 mb-2">Checkout</h1>
+
+    <!-- Progreso -->
+    <ol v-if="step < 4" class="flex items-center gap-2 mb-8 text-sm">
+      <li
+        v-for="(label, index) in ['Dirección', 'Resumen', 'Pago']"
+        :key="label"
+        class="flex items-center gap-2"
+      >
+        <span
+          class="w-7 h-7 rounded-full flex items-center justify-center font-bold"
           :class="
-            paymentMethod === 'paypal' ? 'bg-blue-100 border-blue-500' : 'bg-white border-gray-300'
+            step > index
+              ? 'bg-primary-600 text-white'
+              : step === index + 1
+                ? 'bg-primary-100 text-primary-700 border-2 border-primary-600'
+                : 'bg-gray-100 text-gray-400'
           "
-          @click="paymentMethod = 'paypal'"
+          >{{ index + 1 }}</span
         >
-          PayPal
-        </button>
+        <span :class="step === index + 1 ? 'font-semibold text-gray-800' : 'text-gray-500'">{{
+          label
+        }}</span>
+        <span v-if="index < 2" class="w-8 h-px bg-gray-300 mx-1"></span>
+      </li>
+    </ol>
+
+    <!-- Paso 1: dirección -->
+    <template v-if="step === 1">
+      <CheckoutAddressForm
+        ref="addressFormRef"
+        :saved-addresses="savedAddresses"
+        :selected-id="selectedAddressId"
+        @select-saved="chooseSaved"
+        @select-new="selectedAddressId = null"
+        @update:form="newAddress = $event"
+      />
+      <div class="flex justify-end">
         <button
-          class="px-4 py-2 rounded border focus:outline-none"
-          :class="
-            paymentMethod === 'mercadopago'
-              ? 'bg-blue-100 border-blue-500'
-              : 'bg-white border-gray-300'
-          "
-          @click="paymentMethod = 'mercadopago'"
+          @click="goToSummary"
+          :disabled="!hasValidAddress"
+          class="px-8 py-3 rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 text-white font-bold hover:from-primary-700 hover:to-primary-800 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          Mercado Pago
+          Continuar al resumen
         </button>
       </div>
-    </div>
+    </template>
 
-    <div v-if="paymentMethod === 'paypal'">
-      <h3 class="font-semibold mb-2">Pagar con PayPal</h3>
-      <div id="paypal-button-container"></div>
-    </div>
+    <!-- Paso 2: resumen -->
+    <template v-else-if="step === 2">
+      <div
+        v-if="selectedAddress"
+        class="mb-6 p-4 bg-primary-50 border border-primary-100 rounded-xl flex justify-between items-start"
+      >
+        <div class="text-sm">
+          <p class="font-semibold text-gray-800">{{ selectedAddress.recipientName }}</p>
+          <p class="text-gray-600">
+            {{ selectedAddress.street }} {{ selectedAddress.exteriorNumber }}
+            {{ selectedAddress.interiorNumber ? ', ' + selectedAddress.interiorNumber : '' }} ·
+            {{ selectedAddress.colonia }} · {{ selectedAddress.municipality }},
+            {{ selectedAddress.state }} · CP {{ selectedAddress.postalCode }}
+          </p>
+          <p class="text-gray-500">Tel: {{ selectedAddress.phone }}</p>
+        </div>
+        <button @click="step = 1" class="text-primary-700 font-medium text-sm hover:underline">
+          Cambiar
+        </button>
+      </div>
 
-    <div v-if="paymentMethod === 'mercadopago'">
-      <h3 class="font-semibold mb-2">Pagar con Mercado Pago</h3>
-      <div id="mercadopago-button-container"></div>
+      <CheckoutSummary
+        :items="cartStore.items"
+        :subtotal-cents="subtotalCents"
+        :iva-cents="estimatedIvaCents"
+        :shipping-cents="estimatedShippingCents"
+        :total-cents="estimatedTotalCents"
+      />
+
+      <div class="flex justify-between">
+        <button
+          @click="step = 1"
+          class="px-6 py-3 rounded-xl border-2 border-gray-200 font-medium text-gray-700 hover:border-primary-300"
+        >
+          Regresar
+        </button>
+        <button
+          @click="step = 3"
+          class="px-8 py-3 rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 text-white font-bold hover:from-primary-700 hover:to-primary-800 transition-all"
+        >
+          Continuar al pago
+        </button>
+      </div>
+    </template>
+
+    <!-- Paso 3: pago -->
+    <template v-else-if="step === 3">
+      <CheckoutSummary
+        :items="cartStore.items"
+        :subtotal-cents="subtotalCents"
+        :iva-cents="estimatedIvaCents"
+        :shipping-cents="estimatedShippingCents"
+        :total-cents="estimatedTotalCents"
+      />
+      <CheckoutPayment v-model="paymentMethod" />
+
+      <div class="flex justify-between">
+        <button
+          @click="step = 2"
+          class="px-6 py-3 rounded-xl border-2 border-gray-200 font-medium text-gray-700 hover:border-primary-300"
+        >
+          Regresar
+        </button>
+        <button
+          @click="placeOrder"
+          :disabled="placing"
+          class="px-8 py-3 rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 text-white font-bold hover:from-primary-700 hover:to-primary-800 transition-all disabled:opacity-50"
+        >
+          {{ placing ? 'Creando pedido…' : `Confirmar pedido · ${formatMXN(estimatedTotalCents)}` }}
+        </button>
+      </div>
+    </template>
+
+    <!-- Paso 4: confirmación -->
+    <CheckoutConfirmation v-else-if="createdOrder" :order="createdOrder" />
+
+    <!-- Carrito vacío -->
+    <div v-if="cartEmpty && step < 4" class="text-center py-16">
+      <h2 class="text-xl font-bold text-gray-800 mb-2">Tu carrito está vacío</h2>
+      <p class="text-gray-600 mb-6">Agrega productos antes de continuar con el checkout.</p>
+      <router-link
+        to="/catalog"
+        class="inline-block px-6 py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-700"
+        >Ir al catálogo</router-link
+      >
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, onMounted, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
-import { useToastStore } from '@/store/toast'
+import { ref, computed, onMounted } from 'vue'
 import { useCartStore } from '@/store/cart'
+import { useToastStore } from '@/store/toast'
+import { api } from '@/services/api'
+import { formatMXN } from '@/utils/money'
+import CheckoutAddressForm from '@/components/CheckoutAddressForm.vue'
+import CheckoutSummary from '@/components/CheckoutSummary.vue'
+import CheckoutPayment from '@/components/CheckoutPayment.vue'
+import CheckoutConfirmation from '@/components/CheckoutConfirmation.vue'
 
-const paymentMethod = ref('paypal')
-const router = useRouter()
-const toastStore = useToastStore()
 const cartStore = useCartStore()
+const toastStore = useToastStore()
 
-// Credenciales de ejemplo (reemplaza por las tuyas en producción)
-const PAYPAL_CLIENT_ID = 'sb' // 'sb' es el client-id de sandbox de PayPal
-const MP_PUBLIC_KEY = 'TEST-12345678-abcdefghijklmno' // Ejemplo de public key de Mercado Pago
+const step = ref(1)
+const placing = ref(false)
+const createdOrder = ref(null)
+const paymentMethod = ref('card')
 
-function loadScript(src, id) {
-  return new Promise((resolve, reject) => {
-    if (document.getElementById(id)) return resolve()
-    const script = document.createElement('script')
-    script.src = src
-    script.id = id
-    script.onload = resolve
-    script.onerror = reject
-    document.body.appendChild(script)
-  })
-}
+// ── Direcciones ────────────────────────────────────────────────────────────
+const savedAddresses = ref([])
+const selectedAddressId = ref(null)
+const newAddress = ref(null)
 
-function limpiarCarrito() {
-  cartStore.clear()
-}
+const selectedAddress = computed(() => {
+  if (selectedAddressId.value !== null) {
+    return savedAddresses.value.find((a) => a.id === selectedAddressId.value) ?? null
+  }
+  return newAddress.value && isCompleteAddress(newAddress.value) ? newAddress.value : null
+})
 
-function pagoExitoso(metodo) {
-  limpiarCarrito()
-  toastStore.success(
-    '¡Pago exitoso!',
-    `Tu pago con ${metodo} fue procesado correctamente. Gracias por tu compra.`
+const hasValidAddress = computed(() => selectedAddress.value !== null)
+
+function isCompleteAddress(address) {
+  return Boolean(
+    address?.recipientName &&
+    /^[0-9]{10}$/.test(address.phone ?? '') &&
+    address.street &&
+    address.exteriorNumber &&
+    address.colonia &&
+    address.municipality &&
+    address.state &&
+    /^[0-9]{5}$/.test(address.postalCode ?? '')
   )
-  setTimeout(() => {
-    router.push('/orders') // Redirige al historial de pedidos o página de confirmación
-  }, 1500)
 }
 
-async function renderPayPalButton() {
-  await loadScript(
-    `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`,
-    'paypal-sdk'
-  )
-  if (window.paypal) {
-    window.paypal
-      .Buttons({
-        createOrder: (data, actions) => {
-          // Monto de ejemplo, reemplaza por el real
-          return actions.order.create({
-            purchase_units: [{ amount: { value: '10.00' } }],
-          })
-        },
-        onApprove: (data, actions) => {
-          return actions.order.capture().then(() => {
-            pagoExitoso('PayPal')
-          })
-        },
-        onError: () => {
-          toastStore.error(
-            'Error en el pago con PayPal',
-            'Ocurrió un problema al procesar el pago.'
-          )
+function chooseSaved(address) {
+  selectedAddressId.value = address.id
+}
+
+onMounted(async () => {
+  const response = await api('/user/addresses')
+  if (response.ok) {
+    savedAddresses.value = response.data.data.addresses
+    const preferred = savedAddresses.value.find((a) => a.isDefault) ?? savedAddresses.value[0]
+    if (preferred) selectedAddressId.value = preferred.id
+  }
+})
+
+// ── Totales (espejo de visualización; el servidor recalcula TODO) ──────────
+const cartEmpty = computed(() => cartStore.items.length === 0 && step.value < 4)
+const subtotalCents = computed(() => cartStore.totalCents)
+const estimatedShippingCents = computed(() =>
+  subtotalCents.value >= 50000 ? 0 : subtotalCents.value > 0 ? 9900 : 0
+)
+const estimatedTotalCents = computed(() => subtotalCents.value + estimatedShippingCents.value)
+const estimatedIvaCents = computed(() =>
+  Math.round(subtotalCents.value - subtotalCents.value / 1.16)
+)
+
+function goToSummary() {
+  if (!hasValidAddress.value) {
+    toastStore.warning('Falta información', 'Completa los campos de la dirección de envío.')
+    return
+  }
+  step.value = 2
+}
+
+// ── Crear pedido ───────────────────────────────────────────────────────────
+async function placeOrder() {
+  placing.value = true
+  try {
+    const address = { ...selectedAddress.value }
+
+    // Persist as a saved address if the user asked for it (best effort).
+    if (selectedAddressId.value === null && address.saveAddress && !address.id) {
+      const saved = await api('/user/addresses', {
+        method: 'POST',
+        body: {
+          recipientName: address.recipientName,
+          phone: address.phone,
+          street: address.street,
+          exteriorNumber: address.exteriorNumber,
+          interiorNumber: address.interiorNumber || null,
+          colonia: address.colonia,
+          municipality: address.municipality,
+          state: address.state,
+          postalCode: address.postalCode,
+          references: address.references || null,
         },
       })
-      .render('#paypal-button-container')
-  }
-}
+      if (saved.ok) savedAddresses.value.push(saved.data.data)
+    }
 
-async function renderMercadoPagoButton() {
-  await loadScript('https://sdk.mercadopago.com/js/v2', 'mp-sdk')
-  if (window.MercadoPago) {
-    const mp = new window.MercadoPago(MP_PUBLIC_KEY, { locale: 'es-AR' })
-    // Preferencia de ejemplo, normalmente la genera el backend
-    const preferenceId = '123456789-abcdef-123456-abcdef'
-    mp.checkout({
-      preference: { id: preferenceId },
-      render: {
-        container: '#mercadopago-button-container',
-        label: 'Pagar con Mercado Pago',
-      },
-      onComplete: () => {
-        pagoExitoso('Mercado Pago')
+    const response = await api('/orders', {
+      method: 'POST',
+      body: {
+        shippingAddress: {
+          recipientName: address.recipientName,
+          phone: address.phone,
+          street: address.street,
+          exteriorNumber: address.exteriorNumber,
+          interiorNumber: address.interiorNumber || null,
+          colonia: address.colonia,
+          municipality: address.municipality,
+          state: address.state,
+          postalCode: address.postalCode,
+          references: address.references || null,
+        },
       },
     })
+
+    if (!response.ok) {
+      // 409 = stock insuficiente; el servidor dice qué producto falló
+      toastStore.error(
+        'No se pudo crear el pedido',
+        response.data?.message ?? 'Revisa tu carrito e inténtalo de nuevo.'
+      )
+      if (response.status === 409) step.value = 2
+      return
+    }
+
+    createdOrder.value = {
+      ...response.data.data,
+      paymentMethod: paymentMethod.value,
+    }
+    // El carrito servidor quedó vacío; recargar SIN merge (syncOnLogin re-agregaría)
+    await cartStore.refreshFromServer()
+    step.value = 4
+  } finally {
+    placing.value = false
   }
 }
-
-// Renderiza el botón correspondiente cuando cambia el método de pago
-watch(paymentMethod, async (method) => {
-  await nextTick()
-  if (method === 'paypal') {
-    document.getElementById('paypal-button-container').innerHTML = ''
-    renderPayPalButton()
-  } else if (method === 'mercadopago') {
-    document.getElementById('mercadopago-button-container').innerHTML = ''
-    renderMercadoPagoButton()
-  }
-})
-
-// Render inicial
-onMounted(async () => {
-  if (paymentMethod.value === 'paypal') {
-    renderPayPalButton()
-  } else if (paymentMethod.value === 'mercadopago') {
-    renderMercadoPagoButton()
-  }
-})
 </script>
-
-<style scoped>
-button {
-  transition:
-    background 0.2s,
-    border 0.2s;
-}
-</style>

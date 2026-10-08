@@ -14,6 +14,8 @@ import { productRoutes } from './routes/products.js'
 import { categoryRoutes } from './routes/categories.js'
 import { authRoutes } from './routes/auth.js'
 import { cartRoutes } from './routes/cart.js'
+import { orderRoutes } from './routes/orders.js'
+import { addressRoutes } from './routes/addresses.js'
 
 /** App factory — separate from the server entry so tests can build isolated instances. */
 export async function buildApp(): Promise<FastifyInstance> {
@@ -25,7 +27,13 @@ export async function buildApp(): Promise<FastifyInstance> {
 
   await app.register(helmet)
   // Cookies travel cross-origin (5173 → 3001) with credentials.
-  await app.register(cors, { origin: corsOrigins, credentials: true })
+  // NOTE: default methods are GET/HEAD/POST only — PUT/PATCH/DELETE (cart!)
+  // must be declared or the browser preflight rejects them.
+  await app.register(cors, {
+    origin: corsOrigins,
+    credentials: true,
+    methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  })
   await app.register(rateLimit, {
     max: 100,
     timeWindow: '1 minute',
@@ -55,6 +63,8 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(categoryRoutes)
   await app.register(authRoutes)
   await app.register(cartRoutes)
+  await app.register(orderRoutes)
+  await app.register(addressRoutes)
 
   return app
 }

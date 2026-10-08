@@ -29,13 +29,50 @@ pagos están en desarrollo — ver [Roadmap](#-roadmap).
 
 ## Desarrollo
 
+### Frontend (raíz)
+
 ```bash
 npm install
 cp .env.example .env.local   # ajusta VITE_API_URL si es necesario
 npm run dev                  # http://localhost:5173
 ```
 
-Scripts disponibles:
+### Backend (`backend/`)
+
+Requiere Node `>= 20.19` y PostgreSQL (ver `docker-compose.yml` o instalación
+local con pacman abajo).
+
+```bash
+cd backend
+npm install
+cp .env.example .env         # revisa puertos y DATABASE_URL
+npx prisma migrate dev       # crea las tablas
+npx prisma db seed           # 5 categorías + 8 productos demo
+npm run dev                  # http://localhost:3001 (ver nota de puertos)
+```
+
+OpenAPI interactivo: `http://localhost:3001/docs`
+
+Tests de integración (necesitan PostgreSQL corriendo):
+
+```bash
+cd backend && npm test
+```
+
+> **Nota de puertos:** el `.env.example` usa 3000. Si 3000 está ocupado
+> (pasa si corres otros proyectos locales), cambia `PORT` en `backend/.env`.
+
+#### PostgreSQL local (Arch/EndeavourOS, sin Docker)
+
+```bash
+sudo pacman -S --needed postgresql
+sudo runuser -u postgres -- initdb -D /var/lib/postgres/data
+sudo systemctl enable --now postgresql
+sudo runuser -u postgres -- psql -c "CREATE ROLE babyshop LOGIN PASSWORD 'babyshop_dev' CREATEDB;"
+sudo runuser -u postgres -- createdb -O babyshop babyshop
+```
+
+Scripts disponibles (raíz / frontend):
 
 ```bash
 npm run dev           # servidor de desarrollo
@@ -45,6 +82,18 @@ npm run lint          # ESLint
 npm run lint:fix      # ESLint con autocorrección
 npm run format        # Prettier (escribir)
 npm run format:check  # Prettier (verificar)
+npm run verify        # lint + format:check + build (gate local sin CI)
+```
+
+Scripts del backend (en `backend/`):
+
+```bash
+npm run dev            # tsx watch
+npm run build          # tsc → dist/
+npm test               # vitest (integración real contra PostgreSQL)
+npm run prisma:migrate # prisma migrate dev
+npm run db:seed        # seed del catálogo demo
+npm run prisma:studio  # explorador visual de la BD
 ```
 
 Requiere Node `>= 20.19`.
@@ -61,8 +110,8 @@ entorno del servidor.
 | Fase | Alcance |
 |---|---|
 | F0 ✅ | Higiene del repo: tooling, CI, README honesto |
-| F1 | Tokens de diseño + store de carrito real (Pinia) |
-| F2 | Backend: Fastify + Prisma + PostgreSQL (monorepo) |
+| F1 ✅ | Tokens de diseño + store de carrito real (Pinia) |
+| F2 ✅ | Backend: Fastify + Prisma + PostgreSQL (monorepo) |
 | F3 | Autenticación real (JWT + argon2) |
 | F4 | Catálogo y carrito contra API |
 | F5 | Pedidos con reserva de stock, checkout completo |

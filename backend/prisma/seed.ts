@@ -1,5 +1,6 @@
 import 'dotenv/config'
-import { PrismaClient } from '../generated/prisma/client.js'
+import argon2 from 'argon2'
+import { PrismaClient } from '../generated/prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 
 function normalizeSearch(text: string): string {
@@ -169,6 +170,36 @@ async function main() {
     update: {},
     create: { key: 'requireInvoiceData', value: false },
   })
+
+  // Admin account — ONLY when ADMIN_EMAIL/ADMIN_PASSWORD are set in .env.
+  // No hardcoded credentials in source (that was the original sin of the
+  // fake frontend store). Generate a strong one with:
+  //   openssl rand -base64 16
+  const adminEmail = process.env.ADMIN_EMAIL
+  const adminPassword = process.env.ADMIN_PASSWORD
+  if (adminEmail && adminPassword) {
+    const existing = await prisma.user.findUnique({ where: { email: adminEmail } })
+    if (!existing) {
+      await prisma.user.create({
+        data: {
+          firstName: 'Admin',
+          lastName: 'One Baby Shop',
+          email: adminEmail,
+          passwordHash: await argon2.hash(adminPassword),
+          role: 'ADMIN',
+          emailVerified: true,
+        },
+      })
+      console.log(`👤 Admin creado: ${adminEmail}`)
+    } else if (existing.role !== 'ADMIN') {
+      await prisma.user.update({ where: { email: adminEmail }, data: { role: 'ADMIN' } })
+      console.log(`👤 Usuario promovido a admin: ${adminEmail}`)
+    } else {
+      console.log('👤 Admin ya existe — contraseña NO modificada (usa reset-password)')
+    }
+  } else {
+    console.log('👤 ADMIN_EMAIL/ADMIN_PASSWORD no definidos — seed omite el admin')
+  }
 
   const [productCount, categoryCount] = await Promise.all([
     prisma.product.count(),

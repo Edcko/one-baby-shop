@@ -66,7 +66,7 @@ const handleLogin = async () => {
   try {
     const result = await userStore.login(form.value)
     if (result.success) {
-      if (userStore.user.role === 'admin') {
+      if (userStore.user.role === 'ADMIN') {
         router.push('/admin/dashboard')
       } else {
         error.value = 'No tienes permisos de administrador'

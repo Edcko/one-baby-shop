@@ -83,10 +83,12 @@ const router = createRouter({
 })
 
 // Protección de rutas
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore()
+  // Wait for session restore (refresh cookie) before deciding.
+  await userStore.initialize()
   const isAuth = !!userStore.user
-  const isAdmin = userStore.user && userStore.user.role === 'admin'
+  const isAdmin = userStore.user?.role === 'ADMIN'
   if (to.meta.requiresAuth && !isAuth) {
     next({ name: 'Login' })
   } else if (to.meta.requiresGuest && isAuth) {

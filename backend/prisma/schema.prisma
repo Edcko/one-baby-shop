@@ -232,6 +232,8 @@ model Order {
   paymentStatus           PaymentStatus     @default(PENDING)
   paymentProvider         PaymentProvider?
   paymentMethod           String? // card | oxxo | spei | msi…
+  paymentPreferenceId     String? // MP preference (support/debug)
+  paymentTransactionId    String? // MP payment id once notified
   // Reservation window for async payments (OXXO/SPEI)
   expiresAt               DateTime?
   // Address snapshots — order history survives address edits/deletes

@@ -30,6 +30,13 @@
       <p class="text-2xl font-bold text-gray-900 mt-3">{{ formatMXN(order.totalCents) }}</p>
     </div>
 
+    <button
+      @click="$emit('pay')"
+      class="inline-block bg-gradient-to-r from-secondary-600 to-secondary-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:from-secondary-700 hover:to-secondary-800 transition-all"
+    >
+      Pagar ahora con Mercado Pago
+    </button>
+
     <div class="flex flex-col sm:flex-row gap-3 justify-center">
       <router-link
         to="/orders"
@@ -52,6 +59,8 @@ import { formatMXN } from '@/utils/money'
 const props = defineProps({
   order: { type: Object, required: true },
 })
+
+defineEmits(['pay'])
 
 // OXXO/SPEI confirm manually later; card/msi confirm at capture time.
 const isAsyncPayment = computed(() => !['oxxo', 'spei'].includes(props.order.paymentMethod ?? ''))

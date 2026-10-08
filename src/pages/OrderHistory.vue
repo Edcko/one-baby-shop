@@ -85,14 +85,24 @@
                 {{ order.shippingAddress.postalCode }}
               </p>
 
-              <button
-                v-if="order.status === 'PENDING_PAYMENT'"
-                @click.stop="cancelOrder(order)"
-                :disabled="cancelling === order.orderNumber"
-                class="px-4 py-2 rounded-lg border-2 border-red-200 text-red-600 font-medium hover:bg-red-50 transition-colors disabled:opacity-50"
-              >
-                {{ cancelling === order.orderNumber ? 'Cancelando…' : 'Cancelar pedido' }}
-              </button>
+              <div class="flex gap-2">
+                <button
+                  v-if="order.status === 'PENDING_PAYMENT'"
+                  @click.stop="payOrder(order)"
+                  :disabled="paying === order.orderNumber"
+                  class="px-4 py-2 rounded-lg bg-secondary-600 text-white font-medium hover:bg-secondary-700 transition-colors disabled:opacity-50"
+                >
+                  {{ paying === order.orderNumber ? 'Redirigiendo…' : 'Pagar' }}
+                </button>
+                <button
+                  v-if="order.status === 'PENDING_PAYMENT'"
+                  @click.stop="cancelOrder(order)"
+                  :disabled="cancelling === order.orderNumber"
+                  class="px-4 py-2 rounded-lg border-2 border-red-200 text-red-600 font-medium hover:bg-red-50 transition-colors disabled:opacity-50"
+                >
+                  {{ cancelling === order.orderNumber ? 'Cancelando…' : 'Cancelar pedido' }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -103,16 +113,19 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { api } from '@/services/api'
 import { useToastStore } from '@/store/toast'
 import { formatMXN } from '@/utils/money'
 
 const toastStore = useToastStore()
+const route = useRoute()
 
 const orders = ref([])
 const loading = ref(true)
 const expanded = ref(null)
 const cancelling = ref(null)
+const paying = ref(null)
 
 const statusLabels = {
   PENDING_PAYMENT: 'Pendiente de pago',
@@ -137,10 +150,39 @@ const statusStyles = {
 }
 
 onMounted(async () => {
+  // Retorno de Mercado Pago (back_urls)
+  const outcome = route.query.payment
+  if (outcome === 'success')
+    toastStore.success(
+      '¡Pago recibido!',
+      'Estamos confirmando tu pago; el estado se actualizará en breve.'
+    )
+  if (outcome === 'failure')
+    toastStore.error('Pago rechazado', 'Puedes reintentar el pago desde este listado.')
+  if (outcome === 'pending')
+    toastStore.info('Pago en proceso', 'Te avisaremos cuando se acredite (tarda según el método).')
+
   const response = await api('/orders?limit=50')
   if (response.ok) orders.value = response.data.data.orders
   loading.value = false
 })
+
+async function payOrder(order) {
+  paying.value = order.orderNumber
+  try {
+    const response = await api(`/orders/${order.orderNumber}/payment`, { method: 'POST' })
+    if (response.ok && response.data?.data?.initPoint) {
+      window.location.href = response.data.data.initPoint
+      return
+    }
+    toastStore.warning(
+      'Pago no disponible aún',
+      response.data?.message ?? 'Mercado Pago no está configurado.'
+    )
+  } finally {
+    paying.value = null
+  }
+}
 
 async function cancelOrder(order) {
   cancelling.value = order.orderNumber

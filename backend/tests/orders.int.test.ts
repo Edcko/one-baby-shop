@@ -38,8 +38,12 @@ async function registerAndFillCart(quantity = 2) {
     },
   })
   const accessToken = reg.json().data.accessToken as string
-  const products = await app.inject({ method: 'GET', url: '/api/v1/products?limit=1' })
-  const productId = products.json().data.products[0].id
+  const products = await app.inject({ method: 'GET', url: '/api/v1/products/manta-de-algodon' })
+  const productId = products.json().data.id
+  await app.prisma.product.update({
+    where: { id: productId },
+    data: { stockQuantity: 30, reservedQuantity: 0 },
+  })
   await app.inject({
     method: 'PUT',
     url: '/api/v1/cart/items',

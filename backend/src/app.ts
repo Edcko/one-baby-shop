@@ -16,6 +16,8 @@ import { authRoutes } from './routes/auth.js'
 import { cartRoutes } from './routes/cart.js'
 import { orderRoutes } from './routes/orders.js'
 import { addressRoutes } from './routes/addresses.js'
+import { paymentRoutes } from './routes/payments.js'
+import { registerPaymentProvider } from './services/payments.js'
 
 /** App factory — separate from the server entry so tests can build isolated instances. */
 export async function buildApp(): Promise<FastifyInstance> {
@@ -65,6 +67,10 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(cartRoutes)
   await app.register(orderRoutes)
   await app.register(addressRoutes)
+  await app.register(paymentRoutes)
+
+  // Payment provider decorated AFTER routes (lazy MP client — boot without credentials)
+  await registerPaymentProvider(app)
 
   return app
 }

@@ -31,8 +31,13 @@ async function register() {
 beforeAll(async () => {
   app = await buildApp()
   token = await register()
-  const products = await app.inject({ method: 'GET', url: '/api/v1/products?limit=1' })
-  productId = products.json().data.products[0].id
+  const products = await app.inject({ method: 'GET', url: '/api/v1/products/sonajero-musical' })
+  productId = products.json().data.id
+  // Deterministic: this file OWNS this product (parallel suites share the DB)
+  await app.prisma.product.update({
+    where: { id: productId },
+    data: { stockQuantity: 10, reservedQuantity: 0 },
+  })
 })
 
 afterAll(async () => {

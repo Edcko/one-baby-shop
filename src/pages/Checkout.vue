@@ -122,7 +122,7 @@
     </template>
 
     <!-- Paso 4: confirmación -->
-    <CheckoutConfirmation v-else-if="createdOrder" :order="createdOrder" />
+    <CheckoutConfirmation v-else-if="createdOrder" :order="createdOrder" @pay="payNow" />
 
     <!-- Carrito vacío -->
     <div v-if="cartEmpty && step < 4" class="text-center py-16">
@@ -215,6 +215,22 @@ function goToSummary() {
   step.value = 2
 }
 
+/** Crea la preferencia MP y redirige al checkout de Mercado Pago. */
+async function payNow() {
+  if (!createdOrder.value) return
+  const payment = await api(`/orders/${createdOrder.value.orderNumber}/payment`, {
+    method: 'POST',
+  })
+  if (payment.ok && payment.data?.data?.initPoint) {
+    window.location.href = payment.data.data.initPoint
+    return
+  }
+  toastStore.warning(
+    'Pago no disponible aún',
+    payment.data?.message ?? 'Configura Mercado Pago para procesar pagos.'
+  )
+}
+
 // ── Crear pedido ───────────────────────────────────────────────────────────
 async function placeOrder() {
   placing.value = true
@@ -276,6 +292,14 @@ async function placeOrder() {
     // El carrito servidor quedó vacío; recargar SIN merge (syncOnLogin re-agregaría)
     await cartStore.refreshFromServer()
     step.value = 4
+
+    // Redirigir a Mercado Pago si hay credenciales (si no, queda el botón manual)
+    const payment = await api(`/orders/${createdOrder.value.orderNumber}/payment`, {
+      method: 'POST',
+    })
+    if (payment.ok && payment.data?.data?.initPoint) {
+      window.location.href = payment.data.data.initPoint
+    }
   } finally {
     placing.value = false
   }

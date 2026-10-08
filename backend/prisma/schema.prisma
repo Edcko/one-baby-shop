@@ -1,0 +1,393 @@
+// One Baby Shop — Prisma schema (F2)
+//
+// Deviations from docs/DATABASE_DESIGN.md (documented, deliberate):
+// 1. Money columns are Int cents (priceCents), not DECIMAL(10,2):
+//    Decimal.js objects are not JSON-serializable and float money invites
+//    rounding bugs. Int cents are exact end to end.
+// 2. currency defaults to MXN (the doc said USD — wrong for a Mexican store).
+// 3. Address snapshots (JSONB) on Order instead of FK-only references:
+//    users edit/delete addresses; order history must not lose them.
+// 4. Reserved stock (reservedQuantity + expiresAt) instead of decrementing
+//    stock at order creation: OXXO/SPEI payments confirm hours or days later,
+//    and abandoned vouchers must release inventory.
+// 5. Fiscal fields (RFC, razón social, uso CFDI) live on Address and are
+//    captured now but hidden behind Settings.requireInvoiceData (launch
+//    without CFDI, flip the flag later without schema changes).
+// 6. PaymentTransaction + WebhookEvent: MP webhook idempotency (a replayed
+//    webhook must never double-apply a payment).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────── Catalog ───────────────────────────────────
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  slug        String    @unique
+  description String?
+  imageUrl    String?
+  sortOrder   Int       @default(0)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
+
+  @@index([isActive])
+}
+
+enum IvaRate {
+  ZERO
+  EIGHT
+  SIXTEEN
+
+  @@map("IvaRate")
+}
+
+model Product {
+  id                  Int            @id @default(autoincrement())
+  name                String
+  slug                String         @unique
+  description         String
+  longDescription     String?
+  // Final consumer price in centavos, IVA included (LFPC: displayed price
+  // must be the total price; tax is derived for the breakdown, never added).
+  priceCents          Int
+  originalPriceCents  Int?
+  categoryId          Int
+  category            Category       @relation(fields: [categoryId], references: [id])
+  sku                 String         @unique
+  brand               String?
+  stockQuantity       Int            @default(0)
+  reservedQuantity    Int            @default(0)
+  minStockQuantity    Int            @default(5)
+  ivaRate             IvaRate        @default(SIXTEEN)
+  isActive            Boolean        @default(true)
+  isFeatured          Boolean        @default(false)
+  // Accent-free, lowercase copy of name+description+brand for search:
+  // Postgres 'insensitive' mode ignores case but NOT accents ("biberon" must
+  // match "Biberón"). Works on any Postgres host, no unaccent extension.
+  searchText          String?
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  images              ProductImage[]
+  orderItems          OrderItem[]
+  cartItems           CartItem[]
+  favorites           Favorite[]
+  reviews             Review[]
+
+  @@index([categoryId])
+  @@index([isActive, isFeatured])
+  @@index([priceCents])
+  @@index([searchText])
+}
+
+model ProductImage {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  imageUrl  String
+  altText   String?
+  sortOrder Int      @default(0)
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([productId])
+}
+
+// ─────────────────────────────── Users ─────────────────────────────────────
+
+enum Role {
+  USER
+  ADMIN
+
+  @@map("Role")
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  firstName      String
+  lastName       String
+  email          String    @unique
+  passwordHash   String
+  role           Role      @default(USER)
+  phone          String?
+  isActive       Boolean   @default(true)
+  emailVerified  Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  addresses      Address[]
+  orders         Order[]
+  cartItems      CartItem[]
+  favorites      Favorite[]
+  reviews        Review[]
+  notifications  Notification[]
+
+  @@index([role])
+}
+
+// Mexican address format + optional fiscal data (CFDI-ready).
+model Address {
+  id               Int      @id @default(autoincrement())
+  userId           Int
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Domicilio (SEPOMAX vocabulary)
+  street           String
+  exteriorNumber   String
+  interiorNumber   String?
+  colonia          String
+  municipality     String
+  state            String
+  postalCode       String
+  references       String?
+  isDefault        Boolean  @default(false)
+  // Fiscal (captured since day one; exposed only when requireInvoiceData)
+  rfc              String?
+  razonSocial      String?
+  usoCfdi          String?
+  regimenFiscal    String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([userId])
+  @@index([postalCode])
+}
+
+// ─────────────────────────────── Cart ──────────────────────────────────────
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId String?
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // A cart line is unique per owner (user OR guest session) + product
+  @@unique([userId, productId])
+  @@index([sessionId])
+}
+
+// ─────────────────────────────── Orders ────────────────────────────────────
+
+enum OrderStatus {
+  PENDING_PAYMENT // created, waiting for MP confirmation (card/OXXO/SPEI)
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  EXPIRED // OXXO/SPEI voucher never paid — reservation released
+  REFUNDED
+
+  @@map("OrderStatus")
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  EXPIRED
+  REFUNDED
+
+  @@map("PaymentStatus")
+}
+
+enum PaymentProvider {
+  MERCADO_PAGO
+
+  @@map("PaymentProvider")
+}
+
+model Order {
+  id                      Int               @id @default(autoincrement())
+  orderNumber             String            @unique
+  userId                  Int?
+  user                    User?             @relation(fields: [userId], references: [id])
+  guestEmail              String?
+  status                  OrderStatus       @default(PENDING_PAYMENT)
+  // Money in centavos — server-computed only, never trusted from client
+  subtotalCents           Int
+  ivaCents                Int
+  shippingCents           Int               @default(0)
+  discountCents           Int               @default(0)
+  totalCents              Int
+  currency                String            @default("MXN")
+  // Payment
+  paymentStatus           PaymentStatus     @default(PENDING)
+  paymentProvider         PaymentProvider?
+  paymentMethod           String? // card | oxxo | spei | msi…
+  // Reservation window for async payments (OXXO/SPEI)
+  expiresAt               DateTime?
+  // Address snapshots — order history survives address edits/deletes
+  shippingAddressSnapshot  Json
+  billingAddressSnapshot  Json?
+  requiresInvoice         Boolean           @default(false)
+  // Shipping
+  shippingMethod          String?
+  trackingNumber          String?
+  notes                   String?
+  createdAt               DateTime          @default(now())
+  updatedAt               DateTime          @updatedAt
+  items                   OrderItem[]
+  coupons                 OrderCoupon[]
+  transactions            PaymentTransaction[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id             Int      @id @default(autoincrement())
+  orderId        Int
+  order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId      Int?
+  product        Product? @relation(fields: [productId], references: [id])
+  // Snapshot of what was sold
+  productName    String
+  productSku     String?
+  quantity       Int
+  unitPriceCents Int
+  totalPriceCents Int
+  ivaRate        IvaRate  @default(SIXTEEN)
+  createdAt      DateTime @default(now())
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+// ─────────────────────────────── Payments ──────────────────────────────────
+
+model PaymentTransaction {
+  id                Int             @id @default(autoincrement())
+  orderId           Int
+  order             Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  provider          PaymentProvider
+  providerPaymentId String
+  status            PaymentStatus
+  raw               Json?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  // Idempotency anchor: the same provider payment can never be recorded twice
+  @@unique([provider, providerPaymentId])
+  @@index([orderId])
+}
+
+// Webhook receipt log — dedup BEFORE any side effect (F6)
+model WebhookEvent {
+  id          Int      @id @default(autoincrement())
+  provider    PaymentProvider
+  eventId     String
+  payload     Json
+  processedAt DateTime @default(now())
+
+  @@unique([provider, eventId])
+}
+
+// ─────────────────────────────── Extras ────────────────────────────────────
+
+model Favorite {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  rating    Int
+  title     String?
+  comment   String?
+  isApproved Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, productId])
+  @@index([productId, isApproved])
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED_CENTS
+
+  @@map("DiscountType")
+}
+
+model Coupon {
+  id                Int          @id @default(autoincrement())
+  code              String       @unique
+  discountType      DiscountType
+  discountValue     Int // percent (0-100) or centavos depending on type
+  minPurchaseCents  Int?
+  maxUses           Int?
+  usedCount         Int          @default(0)
+  validFrom         DateTime?
+  validUntil        DateTime?
+  isActive          Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  orders            OrderCoupon[]
+
+  @@index([isActive])
+}
+
+model OrderCoupon {
+  id             Int      @id @default(autoincrement())
+  orderId        Int
+  order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  couponId       Int
+  coupon         Coupon   @relation(fields: [couponId], references: [id])
+  discountCents  Int
+  createdAt      DateTime @default(now())
+
+  @@index([orderId])
+}
+
+model ShippingMethod {
+  id            Int      @id @default(autoincrement())
+  name          String
+  description   String?
+  priceCents    Int
+  estimatedDays Int
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+}
+
+// Feature flags & store settings (e.g. requireInvoiceData=false until CFDI)
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}

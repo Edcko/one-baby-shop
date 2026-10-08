@@ -45,3 +45,5 @@ Thumbs.db
 *.sw?
 *.tmp
 *.temp
+# Backend — Prisma generated client (regenerated with `prisma generate`)
+backend/generated/

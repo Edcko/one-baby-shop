@@ -20,11 +20,14 @@ export const useUserStore = defineStore('user', () => {
       return { success: false, message: 'La contraseña debe tener al menos 6 caracteres.' }
     }
     // Simulación: guardar en localStorage
-    localStorage.setItem('user', JSON.stringify({
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email
-    }))
+    localStorage.setItem(
+      'user',
+      JSON.stringify({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+      })
+    )
     user.value = { firstName: data.firstName, lastName: data.lastName, email: data.email }
     token.value = 'fake-token'
     toastStore.success('¡Registro exitoso!', 'Te hemos enviado un email de confirmación.')
@@ -37,7 +40,10 @@ export const useUserStore = defineStore('user', () => {
     if (saved && saved.email === data.email) {
       user.value = saved
       token.value = 'fake-token'
-      toastStore.success('¡Bienvenido!', `Hola ${saved.firstName}, has iniciado sesión correctamente.`)
+      toastStore.success(
+        '¡Bienvenido!',
+        `Hola ${saved.firstName}, has iniciado sesión correctamente.`
+      )
       return { success: true }
     }
     // Usuario admin de prueba
@@ -46,7 +52,7 @@ export const useUserStore = defineStore('user', () => {
         firstName: 'Admin',
         lastName: 'User',
         email: 'admin@babyshop.com',
-        role: 'admin'
+        role: 'admin',
       }
       user.value = adminUser
       token.value = 'admin-token'
@@ -75,7 +81,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const removeFavorite = (productId) => {
-    favorites.value = favorites.value.filter(id => id !== productId)
+    favorites.value = favorites.value.filter((id) => id !== productId)
     localStorage.setItem('favorites', JSON.stringify(favorites.value))
     toastStore.info('Removido de favoritos', 'El producto se removió de tu lista de favoritos.')
   }
@@ -88,5 +94,15 @@ export const useUserStore = defineStore('user', () => {
     token.value = 'fake-token'
   }
 
-  return { user, token, register, login, logout, favorites, addFavorite, removeFavorite, isFavorite }
-}) 
+  return {
+    user,
+    token,
+    register,
+    login,
+    logout,
+    favorites,
+    addFavorite,
+    removeFavorite,
+    isFavorite,
+  }
+})

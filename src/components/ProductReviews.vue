@@ -1,18 +1,26 @@
 <template>
   <div class="space-y-6">
     <h3 class="text-xl font-heading font-bold">Reseñas</h3>
-    
+
     <!-- Resumen de valoraciones -->
     <div class="flex items-center space-x-4">
       <div class="text-center">
         <div class="text-3xl font-bold text-primary">{{ averageRating }}</div>
         <div class="flex justify-center mt-1">
           <span v-for="i in 5" :key="i" class="text-yellow-400">
-            <svg v-if="i <= Math.round(averageRating)" class="w-5 h-5 fill-current" viewBox="0 0 20 20">
-              <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+            <svg
+              v-if="i <= Math.round(averageRating)"
+              class="w-5 h-5 fill-current"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"
+              />
             </svg>
             <svg v-else class="w-5 h-5 fill-current text-gray-300" viewBox="0 0 20 20">
-              <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+              <path
+                d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"
+              />
             </svg>
           </span>
         </div>
@@ -27,8 +35,8 @@
         <div class="mb-4">
           <label class="block text-sm font-medium mb-2">Valoración</label>
           <div class="flex space-x-1">
-            <button 
-              v-for="i in 5" 
+            <button
+              v-for="i in 5"
               :key="i"
               type="button"
               @click="newReview.rating = i"
@@ -39,10 +47,10 @@
             </button>
           </div>
         </div>
-        
+
         <div class="mb-4">
           <label class="block text-sm font-medium mb-2">Comentario</label>
-          <textarea 
+          <textarea
             v-model="newReview.comment"
             class="textarea textarea-bordered w-full"
             rows="3"
@@ -50,7 +58,7 @@
             required
           ></textarea>
         </div>
-        
+
         <button type="submit" class="btn btn-primary" :disabled="submitting">
           {{ submitting ? 'Enviando...' : 'Enviar reseña' }}
         </button>
@@ -66,10 +74,14 @@
             <div class="flex">
               <span v-for="i in 5" :key="i" class="text-yellow-400">
                 <svg v-if="i <= review.rating" class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                  <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                  <path
+                    d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"
+                  />
                 </svg>
                 <svg v-else class="w-4 h-4 fill-current text-gray-300" viewBox="0 0 20 20">
-                  <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                  <path
+                    d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"
+                  />
                 </svg>
               </span>
             </div>
@@ -87,11 +99,11 @@ import { ref, computed } from 'vue'
 import { useUserStore } from '@/store/user'
 import { useToastStore } from '@/store/toast'
 
-const props = defineProps({
+defineProps({
   productId: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 })
 
 const userStore = useUserStore()
@@ -104,20 +116,20 @@ const reviews = ref([
     userName: 'María García',
     rating: 5,
     comment: 'Excelente producto, muy buena calidad y llegó en perfectas condiciones.',
-    date: new Date('2024-01-15')
+    date: new Date('2024-01-15'),
   },
   {
     id: 2,
     userName: 'Carlos López',
     rating: 4,
     comment: 'Buen producto, cumple con lo esperado. Recomendado.',
-    date: new Date('2024-01-10')
-  }
+    date: new Date('2024-01-10'),
+  },
 ])
 
 const newReview = ref({
   rating: 0,
-  comment: ''
+  comment: '',
 })
 
 const submitting = ref(false)
@@ -130,39 +142,42 @@ const averageRating = computed(() => {
 
 const submitReview = async () => {
   if (!userStore.user) return
-  
+
   submitting.value = true
-  
+
   // Simulación de envío
-  await new Promise(resolve => setTimeout(resolve, 1000))
-  
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
   const review = {
     id: Date.now(),
     userName: `${userStore.user.firstName} ${userStore.user.lastName}`,
     rating: newReview.value.rating,
     comment: newReview.value.comment,
-    date: new Date()
+    date: new Date(),
   }
-  
+
   reviews.value.unshift(review)
-  
+
   // Reset form
   newReview.value = {
     rating: 0,
-    comment: ''
+    comment: '',
   }
-  
+
   submitting.value = false
-  
+
   // Mostrar notificación de éxito
-  toastStore.success('Reseña enviada', 'Gracias por compartir tu experiencia. Tu reseña ha sido publicada.')
+  toastStore.success(
+    'Reseña enviada',
+    'Gracias por compartir tu experiencia. Tu reseña ha sido publicada.'
+  )
 }
 
 const formatDate = (date) => {
   return new Intl.DateTimeFormat('es-ES', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   }).format(date)
 }
-</script> 
+</script>

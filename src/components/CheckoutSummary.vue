@@ -23,7 +23,9 @@ import { ref, computed } from 'vue'
 // Simulación de carrito, reemplazar por store real
 const cartItems = ref([
   { id: 1, name: 'Pañales Premium', quantity: 2, price: 29.99 },
-  { id: 2, name: 'Juguete Sensorial', quantity: 1, price: 15.99 }
+  { id: 2, name: 'Juguete Sensorial', quantity: 1, price: 15.99 },
 ])
-const total = computed(() => cartItems.value.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2))
-</script> 
+const total = computed(() =>
+  cartItems.value.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)
+)
+</script>

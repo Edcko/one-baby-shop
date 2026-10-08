@@ -24,4 +24,4 @@
 
 <script setup>
 // Props y lógica se implementarán después
-</script> 
+</script>

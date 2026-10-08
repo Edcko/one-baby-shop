@@ -13,7 +13,7 @@ export const useToastStore = defineStore('toast', () => {
       title: '',
       message: '',
       duration: 5000,
-      ...toast
+      ...toast,
     }
 
     toasts.value.push(newToast)
@@ -29,7 +29,7 @@ export const useToastStore = defineStore('toast', () => {
   }
 
   const removeToast = (id) => {
-    const index = toasts.value.findIndex(toast => toast.id === id)
+    const index = toasts.value.findIndex((toast) => toast.id === id)
     if (index > -1) {
       toasts.value.splice(index, 1)
     }
@@ -64,6 +64,6 @@ export const useToastStore = defineStore('toast', () => {
     success,
     error,
     info,
-    warning
+    warning,
   }
-}) 
+})

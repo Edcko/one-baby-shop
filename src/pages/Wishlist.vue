@@ -2,7 +2,10 @@
   <div class="min-h-screen bg-gray-50 py-8">
     <div class="container mx-auto px-4">
       <h1 class="text-3xl font-heading font-bold mb-8">Mis Favoritos</h1>
-      <div v-if="favoriteProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+      <div
+        v-if="favoriteProducts.length > 0"
+        class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8"
+      >
         <ProductCard
           v-for="product in favoriteProducts"
           :key="product.id"
@@ -13,7 +16,7 @@
           :price="product.price"
           :category="product.category"
           :rating="product.rating"
-          :reviewCount="product.reviewCount"
+          :review-count="product.reviewCount"
         />
       </div>
       <div v-else class="text-center py-16">
@@ -35,6 +38,6 @@ import { RouterLink } from 'vue-router'
 const userStore = useUserStore()
 
 const favoriteProducts = computed(() => {
-  return products.filter(p => userStore.favorites.includes(p.id))
+  return products.filter((p) => userStore.favorites.includes(p.id))
 })
-</script> 
+</script>

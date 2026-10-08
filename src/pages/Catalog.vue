@@ -1,21 +1,26 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50/30">
     <!-- Header del catálogo mejorado -->
-    <section class="relative py-16 bg-gradient-to-r from-primary via-secondary to-accent overflow-hidden">
+    <section
+      class="relative py-16 bg-gradient-to-r from-primary via-secondary to-accent overflow-hidden"
+    >
       <div class="absolute inset-0 bg-black bg-opacity-10"></div>
       <div class="absolute top-0 left-1/4 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
       <div class="absolute bottom-0 right-1/3 w-24 h-24 bg-white/5 rounded-full blur-lg"></div>
-      
+
       <div class="container mx-auto px-4 relative z-10">
         <div class="text-center max-w-3xl mx-auto">
           <h1 class="font-heading text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
             Catálogo de
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-yellow-200">Productos</span>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-yellow-200"
+              >Productos</span
+            >
           </h1>
           <p class="text-xl text-white/90 mb-8 leading-relaxed">
-            Descubre nuestra amplia selección de productos para tu bebé, cuidadosamente seleccionados para su bienestar
+            Descubre nuestra amplia selección de productos para tu bebé, cuidadosamente
+            seleccionados para su bienestar
           </p>
-          
+
           <!-- Estadísticas -->
           <div class="grid grid-cols-3 gap-8 mt-12">
             <div class="text-center">
@@ -42,8 +47,12 @@
           <!-- Búsqueda mejorada -->
           <div class="flex-1 max-w-2xl">
             <div class="relative group">
-              <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-700 rounded-2xl blur opacity-0 group-hover:opacity-20 transition-all duration-300"></div>
-              <div class="relative bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+              <div
+                class="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-700 rounded-2xl blur opacity-0 group-hover:opacity-20 transition-all duration-300"
+              ></div>
+              <div
+                class="relative bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
+              >
                 <input
                   v-model="searchQuery"
                   type="text"
@@ -51,8 +60,18 @@
                   class="w-full px-6 py-4 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-transparent"
                 />
                 <div class="absolute right-4 top-1/2 transform -translate-y-1/2">
-                  <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                  <svg
+                    class="w-6 h-6 text-purple-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    ></path>
                   </svg>
                 </div>
               </div>
@@ -62,7 +81,9 @@
           <!-- Ordenamiento mejorado -->
           <div class="lg:w-64">
             <div class="relative group">
-              <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl blur opacity-0 group-hover:opacity-20 transition-all duration-300"></div>
+              <div
+                class="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl blur opacity-0 group-hover:opacity-20 transition-all duration-300"
+              ></div>
               <select
                 v-model="sortBy"
                 class="relative w-full px-6 py-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none cursor-pointer shadow-lg"
@@ -73,8 +94,18 @@
                 <option value="category">Categoría</option>
               </select>
               <div class="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                <svg
+                  class="w-5 h-5 text-purple-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                  ></path>
                 </svg>
               </div>
             </div>
@@ -87,7 +118,12 @@
           >
             <div class="flex items-center gap-2">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                ></path>
               </svg>
               <span class="font-medium">Filtros</span>
             </div>
@@ -102,24 +138,50 @@
         <aside class="w-80 hidden lg:block">
           <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 sticky top-8">
             <div class="flex items-center gap-3 mb-8">
-              <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl flex items-center justify-center">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+              <div
+                class="w-10 h-10 bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl flex items-center justify-center"
+              >
+                <svg
+                  class="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                  ></path>
                 </svg>
               </div>
               <h3 class="font-heading text-2xl font-bold text-gray-800">Filtros</h3>
             </div>
-            
+
             <!-- Categorías mejoradas -->
             <div class="mb-8">
               <h4 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                <svg
+                  class="w-4 h-4 text-purple-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                  ></path>
                 </svg>
                 Categorías
               </h4>
               <div class="space-y-3">
-                <label v-for="category in availableCategories" :key="category" class="flex items-center group cursor-pointer">
+                <label
+                  v-for="category in availableCategories"
+                  :key="category"
+                  class="flex items-center group cursor-pointer"
+                >
                   <div class="relative">
                     <input
                       type="checkbox"
@@ -127,14 +189,31 @@
                       v-model="selectedCategories"
                       class="sr-only"
                     />
-                    <div class="w-5 h-5 border-2 border-gray-300 rounded-lg flex items-center justify-center group-hover:border-purple-500 transition-all duration-200">
-                      <svg v-if="selectedCategories.includes(category)" class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    <div
+                      class="w-5 h-5 border-2 border-gray-300 rounded-lg flex items-center justify-center group-hover:border-purple-500 transition-all duration-200"
+                    >
+                      <svg
+                        v-if="selectedCategories.includes(category)"
+                        class="w-3 h-3 text-white"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clip-rule="evenodd"
+                        ></path>
                       </svg>
                     </div>
-                    <div v-if="selectedCategories.includes(category)" class="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg"></div>
+                    <div
+                      v-if="selectedCategories.includes(category)"
+                      class="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg"
+                    ></div>
                   </div>
-                  <span class="ml-3 text-gray-700 group-hover:text-purple-600 transition-colors duration-200">{{ category }}</span>
+                  <span
+                    class="ml-3 text-gray-700 group-hover:text-purple-600 transition-colors duration-200"
+                    >{{ category }}</span
+                  >
                 </label>
               </div>
             </div>
@@ -142,8 +221,18 @@
             <!-- Rango de precios mejorado -->
             <div class="mb-8">
               <h4 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                <svg
+                  class="w-4 h-4 text-purple-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                  ></path>
                 </svg>
                 Precio máximo
               </h4>
@@ -169,7 +258,12 @@
               class="w-full px-6 py-3 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-xl hover:from-gray-200 hover:to-gray-300 transition-all duration-300 font-medium flex items-center justify-center gap-2"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                ></path>
               </svg>
               Limpiar filtros
             </button>
@@ -182,11 +276,18 @@
           <div class="mb-8">
             <div class="flex items-center justify-between">
               <p class="text-gray-600">
-                Mostrando <span class="font-bold text-purple-600">{{ filteredProducts.length }}</span> de <span class="font-bold text-gray-800">{{ products.length }}</span> productos
+                Mostrando
+                <span class="font-bold text-purple-600">{{ filteredProducts.length }}</span> de
+                <span class="font-bold text-gray-800">{{ products.length }}</span> productos
               </p>
               <div class="flex items-center gap-2 text-sm text-gray-500">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
                 </svg>
                 <span>Filtros aplicados</span>
               </div>
@@ -205,7 +306,7 @@
               :price="product.price"
               :category="product.category"
               :rating="product.rating"
-              :reviewCount="product.reviewCount"
+              :review-count="product.reviewCount"
               @add-to-cart="addToCart"
             />
           </div>
@@ -213,9 +314,21 @@
           <!-- Sin resultados mejorado -->
           <div v-if="filteredProducts.length === 0" class="text-center py-16">
             <div class="max-w-md mx-auto">
-              <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+              <div
+                class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6"
+              >
+                <svg
+                  class="w-12 h-12 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                  ></path>
                 </svg>
               </div>
               <h3 class="text-xl font-bold text-gray-800 mb-2">No se encontraron productos</h3>
@@ -239,25 +352,52 @@
           <div class="sticky top-0 bg-white border-b border-gray-100 p-6">
             <div class="flex justify-between items-center">
               <h3 class="font-heading text-2xl font-bold text-gray-800">Filtros</h3>
-              <button @click="mobileFiltersOpen = false" class="p-2 hover:bg-gray-100 rounded-xl transition-colors duration-200">
-                <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              <button
+                @click="mobileFiltersOpen = false"
+                class="p-2 hover:bg-gray-100 rounded-xl transition-colors duration-200"
+              >
+                <svg
+                  class="w-6 h-6 text-gray-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  ></path>
                 </svg>
               </button>
             </div>
           </div>
-          
+
           <div class="p-6 space-y-8">
             <!-- Categorías móviles -->
             <div>
               <h4 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                <svg
+                  class="w-4 h-4 text-purple-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                  ></path>
                 </svg>
                 Categorías
               </h4>
               <div class="space-y-3">
-                <label v-for="category in availableCategories" :key="category" class="flex items-center group cursor-pointer">
+                <label
+                  v-for="category in availableCategories"
+                  :key="category"
+                  class="flex items-center group cursor-pointer"
+                >
                   <div class="relative">
                     <input
                       type="checkbox"
@@ -265,14 +405,31 @@
                       v-model="selectedCategories"
                       class="sr-only"
                     />
-                    <div class="w-5 h-5 border-2 border-gray-300 rounded-lg flex items-center justify-center group-hover:border-purple-500 transition-all duration-200">
-                      <svg v-if="selectedCategories.includes(category)" class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    <div
+                      class="w-5 h-5 border-2 border-gray-300 rounded-lg flex items-center justify-center group-hover:border-purple-500 transition-all duration-200"
+                    >
+                      <svg
+                        v-if="selectedCategories.includes(category)"
+                        class="w-3 h-3 text-white"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clip-rule="evenodd"
+                        ></path>
                       </svg>
                     </div>
-                    <div v-if="selectedCategories.includes(category)" class="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg"></div>
+                    <div
+                      v-if="selectedCategories.includes(category)"
+                      class="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg"
+                    ></div>
                   </div>
-                  <span class="ml-3 text-gray-700 group-hover:text-purple-600 transition-colors duration-200">{{ category }}</span>
+                  <span
+                    class="ml-3 text-gray-700 group-hover:text-purple-600 transition-colors duration-200"
+                    >{{ category }}</span
+                  >
                 </label>
               </div>
             </div>
@@ -280,8 +437,18 @@
             <!-- Rango de precios móvil -->
             <div>
               <h4 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                <svg
+                  class="w-4 h-4 text-purple-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                  ></path>
                 </svg>
                 Precio máximo
               </h4>
@@ -308,7 +475,12 @@
                 class="w-full px-6 py-3 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-xl hover:from-gray-200 hover:to-gray-300 transition-all duration-300 font-medium flex items-center justify-center gap-2"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  ></path>
                 </svg>
                 Limpiar filtros
               </button>
@@ -342,23 +514,24 @@ const toastStore = useToastStore()
 
 // Categorías disponibles
 const availableCategories = computed(() => {
-  return [...new Set(products.map(p => p.category))]
+  return [...new Set(products.map((p) => p.category))]
 })
 
 // Productos filtrados y ordenados
 const filteredProducts = computed(() => {
-  let filtered = products.filter(product => {
+  let filtered = products.filter((product) => {
     // Filtro por búsqueda
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchQuery.value.toLowerCase())
-    
+    const matchesSearch =
+      product.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchQuery.value.toLowerCase())
+
     // Filtro por categoría
-    const matchesCategory = selectedCategories.value.length === 0 || 
-                           selectedCategories.value.includes(product.category)
-    
+    const matchesCategory =
+      selectedCategories.value.length === 0 || selectedCategories.value.includes(product.category)
+
     // Filtro por precio
     const matchesPrice = product.price <= maxPrice.value
-    
+
     return matchesSearch && matchesCategory && matchesPrice
   })
 
@@ -392,26 +565,29 @@ const clearFilters = () => {
 const addToCart = (product) => {
   // Obtener carrito actual del localStorage
   const currentCart = JSON.parse(localStorage.getItem('cart')) || []
-  
+
   // Verificar si el producto ya existe en el carrito
-  const existingItem = currentCart.find(item => item.id === product.id)
-  
+  const existingItem = currentCart.find((item) => item.id === product.id)
+
   if (existingItem) {
     // Si ya existe, incrementar cantidad
     existingItem.quantity += 1
-    toastStore.success('Producto actualizado', `Se agregó otra unidad de ${product.name} al carrito.`)
+    toastStore.success(
+      'Producto actualizado',
+      `Se agregó otra unidad de ${product.name} al carrito.`
+    )
   } else {
     // Si no existe, agregar nuevo producto
     currentCart.push({
       ...product,
-      quantity: 1
+      quantity: 1,
     })
     toastStore.success('Producto agregado', `${product.name} se agregó correctamente al carrito.`)
   }
-  
+
   // Guardar en localStorage
   localStorage.setItem('cart', JSON.stringify(currentCart))
-  
+
   // Emitir evento para actualizar el contador del carrito en el header
   window.dispatchEvent(new CustomEvent('cart-updated', { detail: currentCart }))
 }

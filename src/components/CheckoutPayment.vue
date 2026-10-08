@@ -12,4 +12,4 @@
       </label>
     </div>
   </div>
-</template> 
+</template>

@@ -13,7 +13,7 @@
     "id": 2,
     "name": "Ropa Interior Bebé",
     "description": "Pack de 5 bodys de algodón 100% orgánico",
-    "price": 24.50,
+    "price": 24.5,
     "category": "Ropa",
     "image": "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=300&fit=crop",
     "rating": 4.8,
@@ -53,7 +53,7 @@
     "id": 6,
     "name": "Manta de Algodón",
     "description": "Manta suave y cálida para arrullar a tu bebé",
-    "price": 32.00,
+    "price": 32.0,
     "category": "Ropa",
     "image": "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=300&fit=crop",
     "rating": 4.7,
@@ -63,7 +63,7 @@
     "id": 7,
     "name": "Sonajero Musical",
     "description": "Sonajero con luces y música para estimular al bebé",
-    "price": 22.50,
+    "price": 22.5,
     "category": "Juguetes",
     "image": "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=300&h=300&fit=crop",
     "rating": 4.3,
@@ -79,4 +79,4 @@
     "rating": 4.1,
     "reviewCount": 92
   }
-] 
+]

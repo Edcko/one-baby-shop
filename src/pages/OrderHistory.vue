@@ -16,4 +16,4 @@ import OrderList from '@/components/OrderList.vue'
 import OrderDetail from '@/components/OrderDetail.vue'
 
 const selectedOrder = ref(null)
-</script> 
+</script>

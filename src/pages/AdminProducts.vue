@@ -15,4 +15,4 @@
 import AdminSidebar from '@/components/AdminSidebar.vue'
 import AdminProductTable from '@/components/AdminProductTable.vue'
 import AdminProductForm from '@/components/AdminProductForm.vue'
-</script> 
+</script>

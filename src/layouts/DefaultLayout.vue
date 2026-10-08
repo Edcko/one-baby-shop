@@ -5,9 +5,9 @@
       <router-view />
     </main>
     <Footer />
-    <CartModal 
-      :is-open="cartOpen" 
-      :cart-items="cartItems" 
+    <CartModal
+      :is-open="cartOpen"
+      :cart-items="cartItems"
       @close="cartOpen = false"
       @remove="removeFromCart"
       @clear="clearCart"
@@ -30,11 +30,6 @@ const router = useRouter()
 const cartItemCount = computed(() => {
   return cartItems.value.reduce((sum, item) => sum + item.quantity, 0)
 })
-
-const updateCart = (newItems) => {
-  cartItems.value = newItems
-  localStorage.setItem('cart', JSON.stringify(cartItems.value))
-}
 
 function removeFromCart(idx) {
   cartItems.value.splice(idx, 1)
@@ -65,7 +60,11 @@ onUnmounted(() => {
 })
 
 // Sincroniza carrito con localStorage
-watch(cartItems, (val) => {
-  localStorage.setItem('cart', JSON.stringify(val))
-}, { deep: true })
+watch(
+  cartItems,
+  (val) => {
+    localStorage.setItem('cart', JSON.stringify(val))
+  },
+  { deep: true }
+)
 </script>

@@ -13,4 +13,4 @@
 <script setup>
 import AdminSidebar from '@/components/AdminSidebar.vue'
 import AdminUserTable from '@/components/AdminUserTable.vue'
-</script> 
+</script>

@@ -151,9 +151,15 @@ export async function productRoutes(fastify: FastifyInstance) {
         throw ApiError.badRequest('minPriceCents no puede ser mayor que maxPriceCents')
       }
 
+      // category accepts comma-separated slugs (multi-select UI)
+      const categorySlugs = q.category
+        ?.split(',')
+        .map((slug) => slug.trim())
+        .filter(Boolean)
+
       const where = {
         isActive: true,
-        ...(q.category ? { category: { slug: q.category } } : {}),
+        ...(categorySlugs?.length ? { category: { slug: { in: categorySlugs } } } : {}),
         ...(q.featured !== undefined ? { isFeatured: q.featured } : {}),
         ...(q.search
           ? {

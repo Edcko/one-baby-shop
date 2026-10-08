@@ -35,7 +35,9 @@
               <div class="flex-1">
                 <div class="font-semibold text-gray-800">{{ item.name }}</div>
                 <div class="text-sm text-gray-500">Cantidad: {{ item.quantity }}</div>
-                <div class="text-sm text-primary-600 font-bold">${{ item.price }}</div>
+                <div class="text-sm text-primary-600 font-bold">
+                  {{ formatMXN(item.priceCents) }}
+                </div>
               </div>
               <button
                 @click="cartStore.remove(item.id)"
@@ -47,9 +49,9 @@
           </ul>
           <div class="flex justify-between items-center mb-4">
             <span class="font-bold text-lg">Total:</span>
-            <span class="text-xl text-primary-700 font-bold"
-              >${{ cartStore.total.toFixed(2) }}</span
-            >
+            <span class="text-xl text-primary-700 font-bold">{{
+              formatMXN(cartStore.totalCents)
+            }}</span>
           </div>
           <div class="flex gap-2">
             <button
@@ -73,6 +75,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { formatMXN } from '@/utils/money'
 import { useCartStore } from '@/store/cart'
 
 const cartStore = useCartStore()

@@ -78,40 +78,61 @@
 
             <!-- Precio -->
             <div class="flex items-center space-x-4">
-              <span class="text-3xl font-bold text-primary-700">${{ product.price }}</span>
-              <span v-if="product.originalPrice" class="text-xl text-gray-500 line-through"
-                >${{ product.originalPrice }}</span
-              >
+              <span class="text-3xl font-bold text-primary-700">{{
+                formatMXN(product.priceCents)
+              }}</span>
+              <span v-if="product.originalPriceCents" class="text-xl text-gray-500 line-through">{{
+                formatMXN(product.originalPriceCents)
+              }}</span>
               <span
-                v-if="product.discount"
+                v-if="product.originalPriceCents && product.originalPriceCents > product.priceCents"
                 class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-sm font-medium"
               >
-                -{{ product.discount }}%
+                -{{ Math.round((1 - product.priceCents / product.originalPriceCents) * 100) }}%
               </span>
             </div>
 
+            <!-- Disponibilidad -->
+            <p v-if="product.available <= 0" class="text-red-600 font-semibold">
+              Sin stock disponible
+            </p>
+            <p v-else-if="product.available <= 5" class="text-amber-600 font-medium">
+              ¡Últimas {{ product.available }} unidades!
+            </p>
+
             <!-- Botones de acción -->
-            <div class="flex space-x-4">
-              <button class="btn btn-primary flex-1">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m6 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"
-                  ></path>
-                </svg>
-                Agregar al carrito
-              </button>
-              <button class="btn btn-outline">
+            <div class="flex flex-wrap items-center gap-4">
+              <div class="flex items-center border border-gray-300 rounded-xl overflow-hidden">
+                <button
+                  @click="quantity = Math.max(1, quantity - 1)"
+                  class="px-4 py-3 hover:bg-gray-100 text-lg font-bold"
+                  aria-label="Reducir cantidad"
+                >
+                  −
+                </button>
+                <span class="px-4 py-3 min-w-[3rem] text-center font-semibold">{{ quantity }}</span>
+                <button
+                  @click="quantity = Math.min(product.available || 99, quantity + 1)"
+                  class="px-4 py-3 hover:bg-gray-100 text-lg font-bold"
+                  aria-label="Aumentar cantidad"
+                >
+                  +
+                </button>
+              </div>
+              <button
+                @click="addToCart"
+                :disabled="product.available <= 0"
+                class="flex-1 min-w-[12rem] bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-3 rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"
                   ></path>
                 </svg>
+                {{ product.available <= 0 ? 'Agotado' : 'Agregar al carrito' }}
               </button>
             </div>
 
@@ -121,7 +142,7 @@
               <div class="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <span class="font-medium text-gray-700">Categoría:</span>
-                  <span class="ml-2 text-gray-600">{{ product.category }}</span>
+                  <span class="ml-2 text-gray-600">{{ product.category?.name }}</span>
                 </div>
                 <div>
                   <span class="font-medium text-gray-700">SKU:</span>
@@ -158,19 +179,46 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { api } from '@/services/api'
+import { formatMXN } from '@/utils/money'
+import { useCartStore } from '@/store/cart'
+import { useToastStore } from '@/store/toast'
 import ProductReviews from '@/components/ProductReviews.vue'
 
 const route = useRoute()
+const cartStore = useCartStore()
+const toastStore = useToastStore()
+
 // null = loading, object = loaded, false = not found
 const product = ref(null)
 const loaded = ref(false)
+const quantity = ref(1)
 
-onMounted(async () => {
-  const products = await import('@/data/products.json')
-  const productId = parseInt(route.params.id)
-  product.value = products.default.find((p) => p.id === productId) ?? false
+async function load(idOrSlug) {
+  product.value = null
+  loaded.value = false
+  quantity.value = 1
+
+  const response = await api(`/products/${idOrSlug}`)
+  product.value = response.ok && response.data?.data ? response.data.data : false
   loaded.value = true
-})
+}
+
+const addToCart = async () => {
+  if (!product.value) return
+  await cartStore.add(product.value, quantity.value)
+  toastStore.success(
+    'Producto agregado',
+    `${quantity.value} × ${product.value.name} se agregaron al carrito.`
+  )
+}
+
+onMounted(() => load(route.params.id))
+// Navegación entre productos (mismo componente, distinto param)
+watch(
+  () => route.params.id,
+  (id) => id && load(id)
+)
 </script>

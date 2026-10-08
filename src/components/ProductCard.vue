@@ -75,23 +75,25 @@
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center gap-3">
             <div class="flex flex-col">
-              <span class="text-2xl font-bold text-purple-600" aria-label="Precio: ${{ price }}"
-                >${{ price }}</span
+              <span
+                class="text-2xl font-bold text-purple-600"
+                aria-label="Precio: {{ formatMXN(priceCents) }}"
+                >{{ formatMXN(priceCents) }}</span
               >
               <span
-                v-if="originalPrice"
+                v-if="originalPriceCents"
                 class="text-sm text-gray-400 line-through"
-                aria-label="Precio original: ${{ originalPrice }}"
-                >${{ originalPrice }}</span
+                aria-label="Precio original: {{ formatMXN(originalPriceCents) }}"
+                >{{ formatMXN(originalPriceCents) }}</span
               >
             </div>
             <div
               v-if="discount"
               class="bg-gradient-to-r from-green-500 to-green-600 text-white text-xs px-2 py-1 rounded-full font-bold"
               role="status"
-              aria-label="Ahorras ${{ Math.round((originalPrice - price) * 100) / 100 }}"
+              aria-label="Ahorras {{ formatMXN(savingsCents) }}"
             >
-              Ahorras ${{ Math.round((originalPrice - price) * 100) / 100 }}
+              Ahorras {{ formatMXN(savingsCents) }}
             </div>
           </div>
         </div>
@@ -101,7 +103,7 @@
     <div class="px-6 pb-6">
       <button
         @click.stop.prevent="
-          $emit('add-to-cart', { id, name: title, price: parseFloat(price), image, quantity: 1 })
+          $emit('add-to-cart', { id, name: title, priceCents, image, quantity: 1 })
         "
         class="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-3 rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-medium text-sm flex items-center justify-center gap-2 shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
         :aria-label="`Agregar ${title} al carrito`"
@@ -169,24 +171,35 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useUserStore } from '@/store/user'
+import { formatMXN } from '@/utils/money'
 
 const userStore = useUserStore()
 
-// Props esperadas: image, title, description, price, category, discount, originalPrice
+// Props from the API product shape (money in centavos).
 const props = defineProps({
   id: { type: [Number, String], required: true },
   image: { type: String, default: '' },
   title: { type: String, default: '' },
   description: { type: String, default: '' },
-  price: { type: [Number, String], default: 0 },
+  priceCents: { type: Number, default: 0 },
   category: { type: String, default: '' },
-  discount: { type: Number, default: 0 },
-  originalPrice: { type: [Number, String], default: null },
+  originalPriceCents: { type: Number, default: null },
   rating: { type: Number, default: 0 },
   reviewCount: { type: Number, default: 0 },
 })
+
+// Derived discount (percent) — shown only when there is a real original price.
+const discount = computed(() => {
+  if (!props.originalPriceCents || props.originalPriceCents <= props.priceCents) return 0
+  return Math.round((1 - props.priceCents / props.originalPriceCents) * 100)
+})
+
+const savingsCents = computed(() =>
+  props.originalPriceCents ? Math.max(0, props.originalPriceCents - props.priceCents) : 0
+)
 
 const toggleFavorite = () => {
   if (!userStore.user) return

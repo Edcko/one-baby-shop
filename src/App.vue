@@ -12,12 +12,25 @@
 
 <script setup>
 import { RouterView } from 'vue-router'
-import { shallowRef } from 'vue'
+import { shallowRef, watch } from 'vue'
+import { useUserStore } from '@/store/user'
+import { useCartStore } from '@/store/cart'
 import Toast from '@/components/Toast.vue'
 import ErrorBoundary from '@/components/ErrorBoundary.vue'
 
 // Static SEO meta lives in index.html — the single source of truth.
 const DevTools = shallowRef(null)
+
+// Login → merge the guest cart into the server cart (once per session).
+// Lives here (App) to avoid a circular import between the user and cart stores.
+const userStore = useUserStore()
+const cartStore = useCartStore()
+watch(
+  () => userStore.user?.id,
+  (id, previousId) => {
+    if (id && id !== previousId) cartStore.syncOnLogin()
+  }
+)
 
 if (import.meta.env.DEV) {
   import('@/components/DevTools.vue').then((m) => {

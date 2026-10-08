@@ -13,6 +13,7 @@ import { healthRoutes } from './routes/health.js'
 import { productRoutes } from './routes/products.js'
 import { categoryRoutes } from './routes/categories.js'
 import { authRoutes } from './routes/auth.js'
+import { cartRoutes } from './routes/cart.js'
 
 /** App factory — separate from the server entry so tests can build isolated instances. */
 export async function buildApp(): Promise<FastifyInstance> {
@@ -53,6 +54,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(productRoutes)
   await app.register(categoryRoutes)
   await app.register(authRoutes)
+  await app.register(cartRoutes)
 
   return app
 }

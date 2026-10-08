@@ -28,7 +28,7 @@
               <div class="text-white/80 text-sm">Productos</div>
             </div>
             <div class="text-center">
-              <div class="text-3xl font-bold text-white mb-2">{{ availableCategories.length }}</div>
+              <div class="text-3xl font-bold text-white mb-2">{{ categories.length }}</div>
               <div class="text-white/80 text-sm">Categorías</div>
             </div>
             <div class="text-center">
@@ -91,7 +91,6 @@
                 <option value="name">Nombre A-Z</option>
                 <option value="price-low">Precio: Menor a Mayor</option>
                 <option value="price-high">Precio: Mayor a Menor</option>
-                <option value="category">Categoría</option>
               </select>
               <div class="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
                 <svg
@@ -178,14 +177,14 @@
               </h4>
               <div class="space-y-3">
                 <label
-                  v-for="category in availableCategories"
-                  :key="category"
+                  v-for="category in categories"
+                  :key="category.slug"
                   class="flex items-center group cursor-pointer"
                 >
                   <div class="relative">
                     <input
                       type="checkbox"
-                      :value="category"
+                      :value="category.slug"
                       v-model="selectedCategories"
                       class="sr-only"
                     />
@@ -241,13 +240,16 @@
                   type="range"
                   v-model="maxPrice"
                   :min="0"
-                  :max="100"
+                  :step="50"
+                  :max="5000"
                   class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                 />
                 <div class="flex justify-between items-center">
                   <span class="text-sm text-gray-600">$0</span>
-                  <span class="text-lg font-bold text-purple-600">${{ maxPrice }}</span>
-                  <span class="text-sm text-gray-600">$100</span>
+                  <span class="text-lg font-bold text-purple-600">{{
+                    formatMXN(maxPrice * 100)
+                  }}</span>
+                  <span class="text-sm text-gray-600">$5,000</span>
                 </div>
               </div>
             </div>
@@ -277,7 +279,7 @@
             <div class="flex items-center justify-between">
               <p class="text-gray-600">
                 Mostrando
-                <span class="font-bold text-purple-600">{{ filteredProducts.length }}</span> de
+                <span class="font-bold text-purple-600">{{ total }}</span> de
                 <span class="font-bold text-gray-800">{{ products.length }}</span> productos
               </p>
               <div class="flex items-center gap-2 text-sm text-gray-500">
@@ -294,25 +296,46 @@
             </div>
           </div>
 
+          <!-- Estado de error -->
+          <div v-if="error" class="text-center py-16">
+            <p class="text-lg text-red-600 font-semibold mb-2">{{ error }}</p>
+            <button
+              @click="fetchProducts(true)"
+              class="px-6 py-2 rounded-lg bg-primary-600 text-white font-bold hover:bg-primary-700 transition-colors"
+            >
+              Reintentar
+            </button>
+          </div>
+
+          <!-- Estado de carga -->
+          <div v-else-if="loading" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+            <div
+              v-for="n in 6"
+              :key="n"
+              class="bg-white rounded-2xl shadow-lg h-96 animate-pulse"
+            ></div>
+          </div>
+
           <!-- Grid de productos mejorado -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+          <div v-else class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
             <ProductCard
-              v-for="product in filteredProducts"
+              v-for="product in products"
               :key="product.id"
               :id="product.id"
               :image="product.image"
               :title="product.name"
               :description="product.description"
-              :price="product.price"
-              :category="product.category"
+              :price-cents="product.priceCents"
+              :category="product.category ? product.category.name : ''"
               :rating="product.rating"
               :review-count="product.reviewCount"
+              :original-price-cents="product.originalPriceCents"
               @add-to-cart="addToCart"
             />
           </div>
 
           <!-- Sin resultados mejorado -->
-          <div v-if="filteredProducts.length === 0" class="text-center py-16">
+          <div v-if="!loading && !error && products.length === 0" class="text-center py-16">
             <div class="max-w-md mx-auto">
               <div
                 class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6"
@@ -340,6 +363,20 @@
                 Limpiar filtros
               </button>
             </div>
+          </div>
+
+          <!-- Cargar más (paginación) -->
+          <div v-if="!loading && !error && page < totalPages" class="text-center py-10">
+            <button
+              @click="fetchProducts(false)"
+              :disabled="loadingMore"
+              class="px-8 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-purple-700 text-white font-bold hover:from-purple-700 hover:to-purple-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {{ loadingMore ? 'Cargando…' : 'Cargar más productos' }}
+            </button>
+            <p class="text-sm text-gray-500 mt-2">
+              Mostrando {{ products.length }} de {{ total }} productos
+            </p>
           </div>
         </div>
       </div>
@@ -394,14 +431,14 @@
               </h4>
               <div class="space-y-3">
                 <label
-                  v-for="category in availableCategories"
-                  :key="category"
+                  v-for="category in categories"
+                  :key="category.slug"
                   class="flex items-center group cursor-pointer"
                 >
                   <div class="relative">
                     <input
                       type="checkbox"
-                      :value="category"
+                      :value="category.slug"
                       v-model="selectedCategories"
                       class="sr-only"
                     />
@@ -457,13 +494,16 @@
                   type="range"
                   v-model="maxPrice"
                   :min="0"
-                  :max="100"
+                  :step="50"
+                  :max="5000"
                   class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                 />
                 <div class="flex justify-between items-center">
                   <span class="text-sm text-gray-600">$0</span>
-                  <span class="text-lg font-bold text-purple-600">${{ maxPrice }}</span>
-                  <span class="text-sm text-gray-600">$100</span>
+                  <span class="text-lg font-bold text-purple-600">{{
+                    formatMXN(maxPrice * 100)
+                  }}</span>
+                  <span class="text-sm text-gray-600">$5,000</span>
                 </div>
               </div>
             </div>
@@ -499,73 +539,107 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useToastStore } from '@/store/toast'
 import { useCartStore } from '@/store/cart'
-import products from '@/data/products.json'
+import { api } from '@/services/api'
+import { formatMXN } from '@/utils/money'
 import ProductCard from '@/components/ProductCard.vue'
 
-// Estado reactivo
+// Server-driven catalog (F4) — filters map to /api/v1/products query params.
+const MAX_PRICE_PESOS = 5000
+const PAGE_SIZE = 12
+
 const searchQuery = ref('')
-const selectedCategories = ref([])
-const maxPrice = ref(100)
+const selectedCategories = ref([]) // category slugs
+const maxPrice = ref(MAX_PRICE_PESOS) // MXN pesos (slider), sent as cents
 const sortBy = ref('name')
 const mobileFiltersOpen = ref(false)
 const toastStore = useToastStore()
 const cartStore = useCartStore()
 
-// Categorías disponibles
-const availableCategories = computed(() => {
-  return [...new Set(products.map((p) => p.category))]
-})
+const products = ref([])
+const categories = ref([])
+const loading = ref(false)
+const loadingMore = ref(false)
+const error = ref('')
+const page = ref(1)
+const total = ref(0)
+const totalPages = ref(1)
 
-// Productos filtrados y ordenados
-const filteredProducts = computed(() => {
-  let filtered = products.filter((product) => {
-    // Filtro por búsqueda
-    const matchesSearch =
-      product.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchQuery.value.toLowerCase())
+const sortMapping = {
+  name: { sort: 'name', order: 'asc' },
+  'price-low': { sort: 'price', order: 'asc' },
+  'price-high': { sort: 'price', order: 'desc' },
+}
 
-    // Filtro por categoría
-    const matchesCategory =
-      selectedCategories.value.length === 0 || selectedCategories.value.includes(product.category)
+async function fetchProducts(reset) {
+  if (reset) {
+    page.value = 1
+    loading.value = true
+  } else {
+    loadingMore.value = true
+    page.value += 1
+  }
+  error.value = ''
 
-    // Filtro por precio
-    const matchesPrice = product.price <= maxPrice.value
-
-    return matchesSearch && matchesCategory && matchesPrice
+  const params = new URLSearchParams({
+    page: String(page.value),
+    limit: String(PAGE_SIZE),
+    ...(searchQuery.value.trim() ? { search: searchQuery.value.trim() } : {}),
+    ...(selectedCategories.value.length ? { category: selectedCategories.value.join(',') } : {}),
+    ...(maxPrice.value < MAX_PRICE_PESOS ? { maxPriceCents: String(maxPrice.value * 100) } : {}),
+    ...sortMapping[sortBy.value],
   })
 
-  // Ordenamiento
-  filtered.sort((a, b) => {
-    switch (sortBy.value) {
-      case 'name':
-        return a.name.localeCompare(b.name)
-      case 'price-low':
-        return a.price - b.price
-      case 'price-high':
-        return b.price - a.price
-      case 'category':
-        return a.category.localeCompare(b.category)
-      default:
-        return 0
-    }
-  })
+  const response = await api(`/products?${params.toString()}`)
 
-  return filtered
+  if (response.ok && response.data?.data?.products) {
+    const data = response.data.data
+    products.value = reset ? data.products : [...products.value, ...data.products]
+    total.value = data.pagination.total
+    totalPages.value = data.pagination.totalPages
+  } else {
+    error.value =
+      response.status === 0
+        ? 'No hay conexión con el servidor.'
+        : 'No se pudo cargar el catálogo. Inténtalo de nuevo.'
+  }
+
+  loading.value = false
+  loadingMore.value = false
+}
+
+async function fetchCategories() {
+  const response = await api('/categories')
+  if (response.ok) categories.value = response.data.data.categories
+}
+
+// Debounced re-fetch when any filter changes.
+let filterTimeout
+watch(
+  [searchQuery, selectedCategories, maxPrice, sortBy],
+  () => {
+    clearTimeout(filterTimeout)
+    filterTimeout = setTimeout(() => fetchProducts(true), 300)
+  },
+  { deep: true }
+)
+
+onMounted(() => {
+  fetchProducts(true)
+  fetchCategories()
 })
 
-// Funciones
 const clearFilters = () => {
   searchQuery.value = ''
   selectedCategories.value = []
-  maxPrice.value = 100
+  maxPrice.value = MAX_PRICE_PESOS
   sortBy.value = 'name'
 }
 
-const addToCart = (product) => {
-  const isNewLine = cartStore.add(product)
+const addToCart = async (product) => {
+  const isNewLine = await cartStore.add(product)
 
   if (isNewLine) {
     toastStore.success('Producto agregado', `${product.name} se agregó correctamente al carrito.`)

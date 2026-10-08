@@ -2,7 +2,7 @@
   <div class="min-h-screen">
     <!-- Hero Section -->
     <section
-      class="relative overflow-hidden bg-gradient-to-br from-primary via-secondary to-accent py-20"
+      class="relative overflow-hidden bg-gradient-to-br from-primary-700 via-primary-600 to-secondary-600 py-20"
     >
       <div class="absolute inset-0 bg-black bg-opacity-10"></div>
       <div class="container mx-auto px-4 relative z-10">
@@ -73,7 +73,7 @@
           <div
             v-for="(category, index) in categories"
             :key="index"
-            class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-secondary to-purple-400 p-6 text-center cursor-pointer transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-2xl"
+            class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-secondary-500 to-primary-500 p-6 text-center cursor-pointer transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-2xl"
           >
             <div
               class="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-30 transition-all duration-300"
@@ -140,7 +140,7 @@
                 </svg>
               </div>
               <h3 class="font-heading text-xl font-bold text-white mb-2">{{ category.name }}</h3>
-              <p class="text-white/80 text-sm">{{ category.count }} productos</p>
+              <p class="text-white/80 text-sm">{{ category.productCount }} productos</p>
             </div>
             <!-- Efecto de brillo -->
             <div
@@ -173,10 +173,10 @@
               />
               <div class="absolute top-4 right-4">
                 <div
-                  v-if="product.discount"
+                  v-if="discountOf(product)"
                   class="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold"
                 >
-                  -{{ product.discount }}%
+                  -{{ discountOf(product) }}%
                 </div>
               </div>
             </div>
@@ -208,13 +208,18 @@
 
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                  <span class="text-2xl font-bold text-purple-600">${{ product.price }}</span>
-                  <span v-if="product.originalPrice" class="text-sm text-gray-400 line-through"
-                    >${{ product.originalPrice }}</span
+                  <span class="text-2xl font-bold text-purple-600">{{
+                    formatMXN(product.priceCents)
+                  }}</span>
+                  <span
+                    v-if="product.originalPriceCents"
+                    class="text-sm text-gray-400 line-through"
+                    >{{ formatMXN(product.originalPriceCents) }}</span
                   >
                 </div>
 
                 <button
+                  @click.stop="addToCart(product)"
                   class="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-medium text-sm flex items-center gap-2"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -319,67 +324,47 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { api } from '@/services/api'
+import { useCartStore } from '@/store/cart'
+import { useToastStore } from '@/store/toast'
+import { formatMXN } from '@/utils/money'
 
-// Categorías destacadas
-const categories = ref([
-  {
-    name: 'Pañales',
-    count: 15,
-  },
-  {
-    name: 'Ropa',
-    count: 28,
-  },
-  {
-    name: 'Juguetes',
-    count: 22,
-  },
-  {
-    name: 'Alimentación',
-    count: 18,
-  },
-])
+const cartStore = useCartStore()
+const toastStore = useToastStore()
 
-// Productos destacados
-const featuredProducts = ref([
-  {
-    name: 'Pañales Premium Ultra Absorbentes',
-    description: 'Pañales de la más alta calidad con tecnología de absorción avanzada',
-    price: 29.99,
-    originalPrice: 39.99,
-    discount: 25,
-    category: 'Pañales',
-    image: 'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=300&h=300&fit=crop',
-  },
-  {
-    name: 'Pack Ropa Interior Orgánica',
-    description: '5 bodys de algodón 100% orgánico, suaves y seguros para la piel sensible',
-    price: 24.5,
-    category: 'Ropa',
-    image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=300&fit=crop',
-  },
-  {
-    name: 'Juguete Educativo Sensorial',
-    description: 'Pelota texturizada para estimulación sensorial y desarrollo motor',
-    price: 15.99,
-    category: 'Juguetes',
-    image: 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=300&h=300&fit=crop',
-  },
-  {
-    name: 'Biberón Anti-cólicos Premium',
-    description: 'Sistema anti-cólicos y anti-reflujo con tecnología avanzada',
-    price: 18.75,
-    category: 'Alimentación',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop',
-  },
-])
+// Catálogo desde la API (F4) — se muestra lo que hay en la base de datos.
+const categories = ref([])
+const featuredProducts = ref([])
 
-// Beneficios
+const discountOf = (product) =>
+  product.originalPriceCents && product.originalPriceCents > product.priceCents
+    ? Math.round((1 - product.priceCents / product.originalPriceCents) * 100)
+    : 0
+
+const addToCart = async (product) => {
+  const isNewLine = await cartStore.add(product)
+  toastStore.success(
+    isNewLine ? 'Producto agregado' : 'Producto actualizado',
+    isNewLine
+      ? `${product.name} se agregó correctamente al carrito.`
+      : `Se agregó otra unidad de ${product.name} al carrito.`
+  )
+}
+
+onMounted(async () => {
+  const [featured, cats] = await Promise.all([
+    api('/products?featured=true&limit=4&sort=createdAt&order=desc'),
+    api('/categories'),
+  ])
+  if (featured.ok) featuredProducts.value = featured.data.data.products
+  if (cats.ok) categories.value = cats.data.data.categories
+})
+
 const benefits = ref([
   {
     title: 'Envío Gratis',
-    description: 'Envío gratuito en pedidos superiores a $50',
+    description: 'Envío gratuito en pedidos superiores a $500 MXN',
   },
   {
     title: 'Garantía de Calidad',

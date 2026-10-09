@@ -63,8 +63,16 @@ export default fp(
       try {
         await request.jwtVerify()
         if (request.user.type !== 'access') throw new Error('wrong token type')
-        if (request.user.role !== 'ADMIN') throw new Error('forbidden')
       } catch {
+        // No/invalid token → 401 (indistinguishable from authenticate)
+        return reply.status(401).send({
+          success: false,
+          error: 'UNAUTHORIZED',
+          message: 'Token de autenticación inválido o expirado',
+        })
+      }
+      // Valid token, wrong role → 403
+      if (request.user.role !== 'ADMIN') {
         return reply.status(403).send({
           success: false,
           error: 'FORBIDDEN',

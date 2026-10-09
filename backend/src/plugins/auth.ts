@@ -14,6 +14,31 @@ export const ACCESS_TTL = '15m'
 export const REFRESH_TTL_SECONDS = 7 * 24 * 60 * 60 // 7 days
 export const REFRESH_COOKIE = 'refresh_token'
 
+/**
+ * Local HTTP deployments (LAN, no TLS yet) must be able to disable the
+ * Secure flag while keeping NODE_ENV=production. COOKIE_SECURE=true|false
+ * overrides; unset = auto (secure in production).
+ */
+function refreshCookieOptions() {
+  const override = process.env.COOKIE_SECURE
+  return {
+    httpOnly: true,
+    sameSite: 'lax' as const,
+    secure:
+      override === 'true' ? true : override === 'false' ? false : env.NODE_ENV === 'production',
+    path: '/api/v1/auth', // cookie only travels to auth endpoints
+    maxAge: REFRESH_TTL_SECONDS,
+  }
+}
+
+export function setRefreshCookie(reply: { setCookie: Function }, token: string) {
+  reply.setCookie(REFRESH_COOKIE, token, refreshCookieOptions())
+}
+
+export function clearRefreshCookie(reply: { clearCookie: Function }) {
+  reply.clearCookie(REFRESH_COOKIE, { path: '/api/v1/auth' })
+}
+
 export interface AccessTokenPayload {
   sub: number
   role: 'USER' | 'ADMIN'

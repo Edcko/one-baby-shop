@@ -2,8 +2,8 @@ import type { FastifyInstance } from 'fastify'
 import argon2 from 'argon2'
 import { ApiError } from '../errors.js'
 import {
-  REFRESH_COOKIE,
-  REFRESH_TTL_SECONDS,
+  clearRefreshCookie,
+  setRefreshCookie,
   signRefreshToken,
   verifyRefreshToken,
 } from '../plugins/auth.js'
@@ -147,13 +147,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       })
 
       const accessToken = fastify.jwt.sign({ sub: user.id, role: user.role, type: 'access' })
-      reply.setCookie(REFRESH_COOKIE, signRefreshToken(fastify, user.id), {
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: env.NODE_ENV === 'production',
-        path: '/api/v1/auth', // cookie only travels to auth endpoints
-        maxAge: REFRESH_TTL_SECONDS,
-      })
+      setRefreshCookie(reply, signRefreshToken(fastify, user.id))
 
       return reply.status(201).send({
         success: true,
@@ -196,13 +190,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       }
 
       const accessToken = fastify.jwt.sign({ sub: user.id, role: user.role, type: 'access' })
-      reply.setCookie(REFRESH_COOKIE, signRefreshToken(fastify, user.id), {
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: env.NODE_ENV === 'production',
-        path: '/api/v1/auth',
-        maxAge: REFRESH_TTL_SECONDS,
-      })
+      setRefreshCookie(reply, signRefreshToken(fastify, user.id))
 
       return {
         success: true,
@@ -223,7 +211,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       },
     },
     handler: async (_request, reply) => {
-      reply.clearCookie(REFRESH_COOKIE, { path: '/api/v1/auth' })
+      clearRefreshCookie(reply)
       return { success: true }
     },
   })
@@ -247,7 +235,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       },
     },
     handler: async (request, reply) => {
-      const token = request.cookies[REFRESH_COOKIE]
+      const token = request.cookies['refresh_token']
       if (!token) throw ApiError.unauthorized()
 
       let userId: number
@@ -262,13 +250,7 @@ export async function authRoutes(fastify: FastifyInstance) {
 
       // Rotate the refresh cookie on every use.
       const accessToken = fastify.jwt.sign({ sub: user.id, role: user.role, type: 'access' })
-      reply.setCookie(REFRESH_COOKIE, signRefreshToken(fastify, user.id), {
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: env.NODE_ENV === 'production',
-        path: '/api/v1/auth',
-        maxAge: REFRESH_TTL_SECONDS,
-      })
+      setRefreshCookie(reply, signRefreshToken(fastify, user.id))
 
       return { success: true, data: { accessToken } }
     },

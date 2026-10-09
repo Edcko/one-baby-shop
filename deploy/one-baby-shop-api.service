@@ -1,0 +1,39 @@
+# One Baby Shop API — systemd unit (self-hosted)
+#
+# Install:
+#   sudo cp deploy/one-baby-shop-api.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now one-baby-shop-api
+#
+# Logs: journalctl -u one-baby-shop-api -f
+
+[Unit]
+Description=One Baby Shop API (Fastify + Prisma)
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+# El proceso corre desde una copia estable del build (no el árbol de git):
+# deploy.sh sincroniza backend → /srv/one-baby-shop/api antes del restart.
+WorkingDirectory=/srv/one-baby-shop/api
+ExecStart=/usr/bin/node dist/src/index.js
+EnvironmentFile=/srv/one-baby-shop/api/.env
+Environment=NODE_ENV=production
+
+# Reinicio ante fallo; nunca mueres en la madrugada sin darte cuenta
+Restart=always
+RestartSec=3
+
+# Endurecimiento mínimo
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/srv/one-baby-shop/api
+PrivateTmp=true
+
+# PM2-free por diseño: systemd ya es el supervisor nativo de Linux.
+User=ed
+Group=ed
+
+[Install]
+WantedBy=multi-user.target

@@ -116,8 +116,8 @@ entorno del servidor.
 | F4 | Catálogo y carrito contra API |
 | F5 | Pedidos con reserva de stock, checkout completo |
 | F6 | Mercado Pago: preferencias server-side + webhooks |
-| F7 | Panel admin real |
-| F8 | Deploy (API + web) |
+| F7 ✅ | Panel admin real |
+| F8 ✅ | Deploy self-hosted (systemd + nginx) — ver [`docs/DEPLOYMENT_GUIDE.md`](docs/DEPLOYMENT_GUIDE.md) |
 | F9 | Facturación CFDI |
 
 Decisiones de producto: mercado **exclusivamente México**, moneda **MXN**,

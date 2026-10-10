@@ -1,5 +1,5 @@
 <template>
-  <footer class="relative bg-ink text-linen overflow-hidden">
+  <footer class="relative bg-linen-dark text-ink overflow-hidden border-t border-ink/10">
     <!-- textura cálida de fondo -->
     <div
       class="absolute inset-0 bg-gradient-to-b from-[#332C26] to-[#26201B]"
@@ -21,7 +21,7 @@
         <div class="lg:col-span-1">
           <router-link to="/" class="inline-flex items-center gap-3 group">
             <div
-              class="w-11 h-11 bg-linen rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300"
+              class="w-11 h-11 bg-white rounded-xl border border-linen-dark flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300"
             >
               <svg class="w-6 h-6 text-primary-500" fill="currentColor" viewBox="0 0 24 24">
                 <path
@@ -30,13 +30,13 @@
               </svg>
             </div>
             <span class="font-heading text-2xl font-bold tracking-tight">
-              <span class="text-primary-400">One</span>
-              <span class="text-accent-400">Baby</span>
-              <span class="text-dustblue-light">Shop</span>
+              <span class="text-primary-500">One</span>
+              <span class="text-accent-500">Baby</span>
+              <span class="text-dustblue">Shop</span>
             </span>
           </router-link>
 
-          <p class="mt-4 text-sm leading-relaxed text-linen/70 max-w-xs">
+          <p class="mt-4 text-sm leading-relaxed text-ink-soft max-w-xs">
             Ropa, pañales y todo lo que tu bebé necesita — elegido con el mismo cuidado con el que
             lo guardarías tú.
           </p>
@@ -50,7 +50,7 @@
               target="_blank"
               rel="noopener noreferrer"
               :aria-label="social.name"
-              class="w-10 h-10 rounded-xl bg-linen/10 flex items-center justify-center hover:bg-accent-500 hover:text-ink transition-all duration-300 hover:-translate-y-0.5"
+              class="w-10 h-10 rounded-xl bg-white border border-linen-dark flex items-center justify-center text-ink hover:bg-primary-600 hover:text-white hover:border-primary-600 transition-all duration-300 hover:-translate-y-0.5"
             >
               <svg
                 class="w-5 h-5"
@@ -64,12 +64,12 @@
 
         <!-- Enlaces -->
         <div>
-          <h3 class="font-heading font-bold text-lg mb-5 text-accent-300">Tienda</h3>
+          <h3 class="font-heading font-bold text-lg mb-5 text-primary-700">Tienda</h3>
           <ul class="space-y-3 text-sm">
             <li v-for="link in shopLinks" :key="link.label">
               <router-link
                 :to="link.to"
-                class="text-linen/70 hover:text-accent-300 hover:pl-1 transition-all duration-200 inline-block"
+                class="text-ink-soft hover:text-primary-600 hover:pl-1 transition-all duration-200 inline-block"
               >
                 {{ link.label }}
               </router-link>
@@ -79,12 +79,12 @@
 
         <!-- Cuenta -->
         <div>
-          <h3 class="font-heading font-bold text-lg mb-5 text-accent-300">Tu cuenta</h3>
+          <h3 class="font-heading font-bold text-lg mb-5 text-primary-700">Tu cuenta</h3>
           <ul class="space-y-3 text-sm">
             <li v-for="link in accountLinks" :key="link.label">
               <router-link
                 :to="link.to"
-                class="text-linen/70 hover:text-accent-300 hover:pl-1 transition-all duration-200 inline-block"
+                class="text-ink-soft hover:text-primary-600 hover:pl-1 transition-all duration-200 inline-block"
               >
                 {{ link.label }}
               </router-link>
@@ -94,11 +94,11 @@
 
         <!-- Contacto -->
         <div>
-          <h3 class="font-heading font-bold text-lg mb-5 text-accent-300">Contacto</h3>
+          <h3 class="font-heading font-bold text-lg mb-5 text-primary-700">Contacto</h3>
           <ul class="space-y-4 text-sm">
             <li class="flex items-start gap-3">
               <span
-                class="w-9 h-9 rounded-lg bg-linen/10 flex items-center justify-center shrink-0"
+                class="w-9 h-9 rounded-lg bg-white border border-linen-dark flex items-center justify-center shrink-0"
               >
                 <svg
                   class="w-4 h-4 text-accent-400"
@@ -117,15 +117,15 @@
               <div>
                 <a
                   href="tel:+525500000000"
-                  class="text-linen/85 hover:text-accent-300 transition-colors"
+                  class="text-ink hover:text-primary-600 transition-colors"
                   >+52 55 0000 0000</a
                 >
-                <p class="text-linen/50 text-xs mt-0.5">Lun–Vie 9:00–18:00</p>
+                <p class="text-ink-light text-xs mt-0.5">Lun–Vie 9:00–18:00</p>
               </div>
             </li>
             <li class="flex items-start gap-3">
               <span
-                class="w-9 h-9 rounded-lg bg-linen/10 flex items-center justify-center shrink-0"
+                class="w-9 h-9 rounded-lg bg-white border border-linen-dark flex items-center justify-center shrink-0"
               >
                 <svg
                   class="w-4 h-4 text-accent-400"
@@ -144,15 +144,15 @@
               <div>
                 <a
                   href="mailto:hola@onebabyshop.mx"
-                  class="text-linen/85 hover:text-accent-300 transition-colors"
+                  class="text-ink hover:text-primary-600 transition-colors"
                   >hola@onebabyshop.mx</a
                 >
-                <p class="text-linen/50 text-xs mt-0.5">Respondemos en 24 h</p>
+                <p class="text-ink-light text-xs mt-0.5">Respondemos en 24 h</p>
               </div>
             </li>
             <li class="flex items-start gap-3">
               <span
-                class="w-9 h-9 rounded-lg bg-linen/10 flex items-center justify-center shrink-0"
+                class="w-9 h-9 rounded-lg bg-white border border-linen-dark flex items-center justify-center shrink-0"
               >
                 <svg
                   class="w-4 h-4 text-accent-400"
@@ -175,8 +175,8 @@
                 </svg>
               </span>
               <div>
-                <p class="text-linen/85">Envíos a todo México</p>
-                <p class="text-linen/50 text-xs mt-0.5">Gratis desde $500 MXN</p>
+                <p class="text-ink">Envíos a todo México</p>
+                <p class="text-ink-light text-xs mt-0.5">Gratis desde $500 MXN</p>
               </div>
             </li>
           </ul>
@@ -185,13 +185,13 @@
 
       <!-- aviso de pago -->
       <div
-        class="border-t border-linen/10 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-linen/50"
+        class="border-t border-ink/10 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-ink-light"
       >
         <p>© {{ new Date().getFullYear() }} One Baby Shop. Todos los derechos reservados.</p>
         <p class="flex items-center gap-2">
           Pagos seguros con
-          <span class="font-bold text-linen/80">Mercado Pago</span>
-          <span class="text-linen/30">·</span>
+          <span class="font-bold text-ink">Mercado Pago</span>
+          <span class="text-ink-light">·</span>
           Tarjeta · MSI · OXXO · SPEI
         </p>
       </div>

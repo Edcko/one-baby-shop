@@ -18,18 +18,19 @@
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
         <!-- Legibilidad: tinte morado de marca, más denso donde vive el texto -->
+        <!-- Tinta cálida sobre el video (dirección Lino): legible sin morados -->
         <div
-          class="absolute inset-0 bg-gradient-to-r from-primary-950/90 via-primary-900/60 to-secondary-900/25"
+          class="absolute inset-0 bg-gradient-to-r from-[#241C14]/92 via-[#241C14]/60 to-[#241C14]/20"
         ></div>
         <div
-          class="absolute inset-0 bg-gradient-to-t from-primary-950/55 via-transparent to-black/10"
+          class="absolute inset-0 bg-gradient-to-t from-[#241C14]/55 via-transparent to-black/10"
         ></div>
       </div>
 
       <div class="container mx-auto px-4 relative z-10 py-28">
         <div class="max-w-2xl">
           <span
-            class="hero-rise inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/25 px-4 py-1.5 text-sm font-semibold text-amber-200 mb-6"
+            class="hero-rise inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/25 px-4 py-1.5 text-sm font-semibold text-accent-200 mb-6"
           >
             🚚 Envío gratis desde $500 MXN
           </span>
@@ -39,7 +40,7 @@
           >
             Cada prenda,
             <span
-              class="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300"
+              class="text-transparent bg-clip-text bg-gradient-to-r from-accent-200 via-accent-100 to-accent-300"
               >doblada con amor</span
             >
           </h1>
@@ -52,7 +53,7 @@
           <div class="hero-rise flex flex-wrap gap-4">
             <router-link
               to="/catalog"
-              class="inline-flex items-center gap-2 bg-white text-primary-700 px-8 py-4 rounded-full font-bold text-lg hover:bg-amber-50 transition-all duration-300 transform hover:scale-105 shadow-xl"
+              class="inline-flex items-center gap-2 bg-white text-primary-700 px-8 py-4 rounded-full font-bold text-lg hover:bg-accent-50 transition-all duration-300 transform hover:scale-105 shadow-xl"
             >
               Explorar productos
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -220,7 +221,7 @@
 
             <div class="p-6">
               <div class="flex items-center justify-between mb-2">
-                <span class="text-xs text-purple-600 font-medium uppercase tracking-wide">{{
+                <span class="text-xs text-primary-600 font-medium uppercase tracking-wide">{{
                   product.category
                 }}</span>
                 <div class="flex text-yellow-400">
@@ -245,7 +246,7 @@
 
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                  <span class="text-2xl font-bold text-purple-600">{{
+                  <span class="text-2xl font-bold text-primary-600">{{
                     formatMXN(product.priceCents)
                   }}</span>
                   <span
@@ -257,7 +258,7 @@
 
                 <button
                   @click.stop="addToCart(product)"
-                  class="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-medium text-sm flex items-center gap-2"
+                  class="bg-gradient-to-r from-primary-600 to-primary-700 text-white px-4 py-2 rounded-lg hover:from-primary-700 hover:to-primary-800 transition-all duration-300 font-medium text-sm flex items-center gap-2"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
@@ -288,14 +289,14 @@
           <div v-for="(benefit, index) in benefits" :key="index" class="text-center group">
             <div class="relative w-24 h-24 mx-auto mb-6">
               <div
-                class="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-all duration-300"
+                class="absolute inset-0 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-all duration-300"
               ></div>
               <div
                 class="relative bg-gradient-to-br from-white to-gray-50 rounded-full flex items-center justify-center shadow-xl group-hover:shadow-2xl transition-all duration-300 transform group-hover:scale-110 border border-white/20"
               >
                 <svg
                   v-if="benefit.title === 'Envío Gratis'"
-                  class="w-12 h-12 text-purple-600 drop-shadow-sm"
+                  class="w-12 h-12 text-primary-600 drop-shadow-sm"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -315,7 +316,7 @@
                 </svg>
                 <svg
                   v-else-if="benefit.title === 'Garantía de Calidad'"
-                  class="w-12 h-12 text-purple-600 drop-shadow-sm"
+                  class="w-12 h-12 text-primary-600 drop-shadow-sm"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -329,7 +330,7 @@
                 </svg>
                 <svg
                   v-else
-                  class="w-12 h-12 text-purple-600 drop-shadow-sm"
+                  class="w-12 h-12 text-primary-600 drop-shadow-sm"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -348,7 +349,7 @@
               ></div>
             </div>
             <h3
-              class="font-heading text-xl font-bold text-gray-800 mb-3 group-hover:text-purple-700 transition-colors duration-300"
+              class="font-heading text-xl font-bold text-gray-800 mb-3 group-hover:text-primary-700 transition-colors duration-300"
             >
               {{ benefit.title }}
             </h3>

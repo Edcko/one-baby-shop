@@ -44,8 +44,8 @@ if (import.meta.env.DEV) {
 :focus {
   outline: none;
   box-shadow:
-    0 0 0 2px rgba(147, 51, 234, 0.3),
-    0 0 0 4px rgba(147, 51, 234, 0.1);
+    0 0 0 2px rgba(168, 85, 57, 0.3),
+    0 0 0 4px rgba(168, 85, 57, 0.1);
   border-radius: 0.375rem;
   transition: box-shadow 0.2s ease-in-out;
 }
@@ -57,21 +57,21 @@ if (import.meta.env.DEV) {
 :focus-visible {
   outline: none;
   box-shadow:
-    0 0 0 2px rgba(147, 51, 234, 0.3),
-    0 0 0 4px rgba(147, 51, 234, 0.1);
+    0 0 0 2px rgba(168, 85, 57, 0.3),
+    0 0 0 4px rgba(168, 85, 57, 0.1);
   border-radius: 0.375rem;
 }
 
 button:focus-visible {
   box-shadow:
-    0 0 0 2px rgba(147, 51, 234, 0.4),
-    0 0 0 4px rgba(147, 51, 234, 0.15);
+    0 0 0 2px rgba(168, 85, 57, 0.4),
+    0 0 0 4px rgba(168, 85, 57, 0.15);
 }
 
 a:focus-visible {
   box-shadow:
-    0 0 0 2px rgba(147, 51, 234, 0.3),
-    0 0 0 4px rgba(147, 51, 234, 0.1);
+    0 0 0 2px rgba(168, 85, 57, 0.3),
+    0 0 0 4px rgba(168, 85, 57, 0.1);
 }
 
 @media (prefers-contrast: high) {

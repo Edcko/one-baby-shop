@@ -20,7 +20,7 @@
             :value="method.id"
             :checked="modelValue === method.id"
             @change="$emit('update:modelValue', method.id)"
-            class="accent-purple-600"
+            class="accent-primary-600"
           />
           <div>
             <div class="font-medium text-gray-800">{{ method.label }}</div>

@@ -19,10 +19,10 @@
         <div v-if="discount" class="absolute top-4 left-4">
           <div class="relative">
             <div
-              class="absolute inset-0 bg-gradient-to-r from-red-500 to-pink-500 rounded-full blur-sm"
+              class="absolute inset-0 bg-gradient-to-r from-red-500 to-secondary-500 rounded-full blur-sm"
             ></div>
             <div
-              class="relative bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs px-3 py-1.5 rounded-full font-bold shadow-lg"
+              class="relative bg-gradient-to-r from-red-500 to-secondary-500 text-white text-xs px-3 py-1.5 rounded-full font-bold shadow-lg"
               role="status"
               aria-label="Descuento del {{ discount }}%"
             >
@@ -33,14 +33,16 @@
       </div>
       <div class="relative p-6">
         <div class="flex items-center gap-2 mb-3">
-          <div class="w-2 h-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
-          <span class="text-xs text-purple-600 font-semibold uppercase tracking-wider">{{
+          <div
+            class="w-2 h-2 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full"
+          ></div>
+          <span class="text-xs text-primary-600 font-semibold uppercase tracking-wider">{{
             category
           }}</span>
         </div>
         <h3
           id="product-title-{{ id }}"
-          class="font-heading text-xl font-bold text-gray-800 mb-3 line-clamp-2 group-hover:text-purple-700 transition-colors duration-300"
+          class="font-heading text-xl font-bold text-gray-800 mb-3 line-clamp-2 group-hover:text-primary-700 transition-colors duration-300"
         >
           {{ title }}
         </h3>
@@ -76,7 +78,7 @@
           <div class="flex items-center gap-3">
             <div class="flex flex-col">
               <span
-                class="text-2xl font-bold text-purple-600"
+                class="text-2xl font-bold text-primary-600"
                 aria-label="Precio: {{ formatMXN(priceCents) }}"
                 >{{ formatMXN(priceCents) }}</span
               >
@@ -105,7 +107,7 @@
         @click.stop.prevent="
           $emit('add-to-cart', { id, name: title, priceCents, image, quantity: 1 })
         "
-        class="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-3 rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-medium text-sm flex items-center justify-center gap-2 shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+        class="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-3 rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all duration-300 font-medium text-sm flex items-center justify-center gap-2 shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
         :aria-label="`Agregar ${title} al carrito`"
         role="button"
         tabindex="0"
@@ -131,7 +133,7 @@
     <button
       v-if="userStore.user"
       @click.stop.prevent="toggleFavorite"
-      class="absolute top-3 right-3 z-10 p-1 rounded-full hover:bg-white/20 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
+      class="absolute top-3 right-3 z-10 p-1 rounded-full hover:bg-white/20 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2"
       :aria-label="
         userStore.isFavorite(id) ? `Remover ${title} de favoritos` : `Agregar ${title} a favoritos`
       "
@@ -140,7 +142,7 @@
     >
       <svg
         v-if="userStore.isFavorite(id)"
-        class="w-7 h-7 text-pink-500 fill-current"
+        class="w-7 h-7 text-secondary-500 fill-current"
         viewBox="0 0 24 24"
         aria-hidden="true"
       >

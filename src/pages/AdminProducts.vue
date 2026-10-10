@@ -65,11 +65,11 @@
           <input v-model="form.imageUrl" placeholder="URL de imagen" class="input md:col-span-2" />
           <div class="flex gap-6 items-center md:col-span-2">
             <label class="flex items-center gap-2 text-sm">
-              <input v-model="form.isFeatured" type="checkbox" class="accent-purple-600" />
+              <input v-model="form.isFeatured" type="checkbox" class="accent-primary-600" />
               Destacado
             </label>
             <label class="flex items-center gap-2 text-sm">
-              <input v-model="form.isActive" type="checkbox" class="accent-purple-600" /> Activo
+              <input v-model="form.isActive" type="checkbox" class="accent-primary-600" /> Activo
             </label>
           </div>
         </div>

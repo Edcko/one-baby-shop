@@ -23,7 +23,7 @@
       <div class="space-y-3">
         <button
           @click="retry"
-          class="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-3 rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-medium"
+          class="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-3 rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all duration-300 font-medium"
         >
           Intentar de nuevo
         </button>

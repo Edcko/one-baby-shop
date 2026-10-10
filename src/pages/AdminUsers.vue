@@ -28,7 +28,7 @@
                   class="text-xs px-2 py-1 rounded-full font-semibold"
                   :class="
                     user.role === 'ADMIN'
-                      ? 'bg-purple-100 text-purple-700'
+                      ? 'bg-primary-100 text-primary-700'
                       : 'bg-gray-100 text-gray-600'
                   "
                 >

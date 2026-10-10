@@ -3,7 +3,7 @@
     class="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary via-secondary to-accent py-16"
   >
     <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md border border-gray-100">
-      <h1 class="font-heading text-3xl font-bold text-center text-purple-700 mb-8">
+      <h1 class="font-heading text-3xl font-bold text-center text-primary-700 mb-8">
         Recuperar contraseña
       </h1>
       <form class="space-y-6" @submit.prevent="handleSubmit">
@@ -12,7 +12,7 @@
           <input
             v-model="form.email"
             type="email"
-            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300"
             placeholder="tu@email.com"
             required
           />
@@ -24,13 +24,13 @@
         <div v-if="error" class="text-red-500 text-sm text-center">{{ error }}</div>
         <button
           type="submit"
-          class="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-4 rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-medium text-lg shadow-lg transform hover:scale-105"
+          class="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white py-4 rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all duration-300 font-medium text-lg shadow-lg transform hover:scale-105"
           :disabled="loading"
         >
           {{ loading ? 'Enviando...' : 'Enviar instrucciones' }}
         </button>
         <p class="text-center text-sm text-gray-500 mt-4">
-          <router-link to="/login" class="text-purple-600 font-semibold hover:underline"
+          <router-link to="/login" class="text-primary-600 font-semibold hover:underline"
             >Volver a iniciar sesión</router-link
           >
         </p>

@@ -1,11 +1,13 @@
 <template>
   <footer
-    class="relative bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white overflow-hidden"
+    class="relative bg-gradient-to-br from-gray-900 via-primary-900 to-gray-900 text-white overflow-hidden"
   >
     <!-- Elementos decorativos de fondo -->
     <div class="absolute inset-0 bg-black bg-opacity-20"></div>
-    <div class="absolute top-0 left-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl"></div>
-    <div class="absolute bottom-0 right-1/3 w-48 h-48 bg-pink-500/10 rounded-full blur-2xl"></div>
+    <div class="absolute top-0 left-1/4 w-64 h-64 bg-primary-500/10 rounded-full blur-3xl"></div>
+    <div
+      class="absolute bottom-0 right-1/3 w-48 h-48 bg-secondary-500/10 rounded-full blur-2xl"
+    ></div>
 
     <div class="container mx-auto px-4 relative z-10">
       <div class="py-16">
@@ -15,7 +17,7 @@
             <div class="flex items-center gap-3 mb-6">
               <div class="relative">
                 <div
-                  class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg"
+                  class="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center shadow-lg"
                 >
                   <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
                     <path
@@ -24,7 +26,7 @@
                   </svg>
                 </div>
                 <div
-                  class="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full animate-pulse"
+                  class="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-secondary-400 to-primary-500 rounded-full animate-pulse"
                 ></div>
               </div>
               <div class="flex flex-col">
@@ -44,7 +46,7 @@
                 class="group relative p-3 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/20"
               >
                 <div
-                  class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-20 transition-all duration-300"
+                  class="absolute inset-0 bg-gradient-to-r from-blue-500 to-primary-500 rounded-xl opacity-0 group-hover:opacity-20 transition-all duration-300"
                 ></div>
                 <svg
                   class="relative w-5 h-5 text-white group-hover:scale-110 transition-transform duration-300"
@@ -61,7 +63,7 @@
                 class="group relative p-3 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/20"
               >
                 <div
-                  class="absolute inset-0 bg-gradient-to-r from-pink-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-20 transition-all duration-300"
+                  class="absolute inset-0 bg-gradient-to-r from-secondary-500 to-primary-500 rounded-xl opacity-0 group-hover:opacity-20 transition-all duration-300"
                 ></div>
                 <svg
                   class="relative w-5 h-5 text-white group-hover:scale-110 transition-transform duration-300"
@@ -97,7 +99,7 @@
           <div>
             <h3 class="font-heading text-xl font-bold mb-6 flex items-center gap-2">
               <div
-                class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center"
+                class="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center"
               >
                 <svg
                   class="w-4 h-4 text-white"
@@ -122,7 +124,7 @@
                   class="flex items-center gap-2 text-white/80 hover:text-white transition-all duration-300 group"
                 >
                   <div
-                    class="w-1 h-1 bg-purple-400 rounded-full group-hover:scale-150 transition-transform duration-300"
+                    class="w-1 h-1 bg-primary-400 rounded-full group-hover:scale-150 transition-transform duration-300"
                   ></div>
                   <span>Inicio</span>
                 </router-link>
@@ -133,7 +135,7 @@
                   class="flex items-center gap-2 text-white/80 hover:text-white transition-all duration-300 group"
                 >
                   <div
-                    class="w-1 h-1 bg-purple-400 rounded-full group-hover:scale-150 transition-transform duration-300"
+                    class="w-1 h-1 bg-primary-400 rounded-full group-hover:scale-150 transition-transform duration-300"
                   ></div>
                   <span>Catálogo</span>
                 </router-link>
@@ -144,7 +146,7 @@
                   class="flex items-center gap-2 text-white/80 hover:text-white transition-all duration-300 group"
                 >
                   <div
-                    class="w-1 h-1 bg-purple-400 rounded-full group-hover:scale-150 transition-transform duration-300"
+                    class="w-1 h-1 bg-primary-400 rounded-full group-hover:scale-150 transition-transform duration-300"
                   ></div>
                   <span>Ofertas</span>
                 </a>
@@ -155,7 +157,7 @@
                   class="flex items-center gap-2 text-white/80 hover:text-white transition-all duration-300 group"
                 >
                   <div
-                    class="w-1 h-1 bg-purple-400 rounded-full group-hover:scale-150 transition-transform duration-300"
+                    class="w-1 h-1 bg-primary-400 rounded-full group-hover:scale-150 transition-transform duration-300"
                   ></div>
                   <span>Novedades</span>
                 </a>
@@ -167,7 +169,7 @@
           <div>
             <h3 class="font-heading text-xl font-bold mb-6 flex items-center gap-2">
               <div
-                class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center"
+                class="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center"
               >
                 <svg
                   class="w-4 h-4 text-white"
@@ -191,7 +193,7 @@
                   class="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center group-hover:bg-white/20 transition-all duration-300"
                 >
                   <svg
-                    class="w-5 h-5 text-purple-400"
+                    class="w-5 h-5 text-primary-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -214,7 +216,7 @@
                   class="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center group-hover:bg-white/20 transition-all duration-300"
                 >
                   <svg
-                    class="w-5 h-5 text-purple-400"
+                    class="w-5 h-5 text-primary-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -237,7 +239,7 @@
                   class="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center group-hover:bg-white/20 transition-all duration-300"
                 >
                   <svg
-                    class="w-5 h-5 text-purple-400"
+                    class="w-5 h-5 text-primary-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"

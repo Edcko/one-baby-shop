@@ -157,7 +157,7 @@
         />
       </div>
       <label class="md:col-span-2 flex items-center gap-2 text-sm text-gray-700">
-        <input v-model="saveAddress" type="checkbox" class="accent-purple-600" />
+        <input v-model="saveAddress" type="checkbox" class="accent-primary-600" />
         Guardar esta dirección en mi cuenta
       </label>
     </form>

@@ -39,7 +39,7 @@
               <div class="space-y-6">
                 <div class="flex items-center gap-4 group">
                   <div
-                    class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300"
+                    class="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300"
                   >
                     <svg
                       class="w-6 h-6 text-white"
@@ -64,7 +64,7 @@
 
                 <div class="flex items-center gap-4 group">
                   <div
-                    class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300"
+                    class="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300"
                   >
                     <svg
                       class="w-6 h-6 text-white"
@@ -89,7 +89,7 @@
 
                 <div class="flex items-center gap-4 group">
                   <div
-                    class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300"
+                    class="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300"
                   >
                     <svg
                       class="w-6 h-6 text-white"
@@ -151,7 +151,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">Nombre</label>
                     <input
                       type="text"
-                      class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                      class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300"
                       placeholder="Tu nombre"
                     />
                   </div>
@@ -159,7 +159,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">Apellido</label>
                     <input
                       type="text"
-                      class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                      class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300"
                       placeholder="Tu apellido"
                     />
                   </div>
@@ -169,7 +169,7 @@
                   <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                   <input
                     type="email"
-                    class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                    class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300"
                     placeholder="tu@email.com"
                   />
                 </div>
@@ -177,7 +177,7 @@
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-2">Asunto</label>
                   <select
-                    class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                    class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300"
                   >
                     <option>Consulta general</option>
                     <option>Soporte técnico</option>
@@ -191,14 +191,14 @@
                   <label class="block text-sm font-medium text-gray-700 mb-2">Mensaje</label>
                   <textarea
                     rows="5"
-                    class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 resize-none"
+                    class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 resize-none"
                     placeholder="Cuéntanos cómo podemos ayudarte..."
                   ></textarea>
                 </div>
 
                 <button
                   type="submit"
-                  class="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-4 rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-medium text-lg shadow-lg transform hover:scale-105"
+                  class="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white py-4 rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all duration-300 font-medium text-lg shadow-lg transform hover:scale-105"
                 >
                   Enviar mensaje
                 </button>

@@ -1,51 +1,49 @@
 <template>
-  <header
-    class="relative bg-gradient-to-r from-primary-700 via-primary-600 to-secondary-600 shadow-lg border-b border-white/20"
-  >
-    <!-- Elementos decorativos de fondo -->
-    <div class="absolute inset-0 bg-black bg-opacity-5"></div>
-    <div class="absolute top-0 left-1/4 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
-    <div class="absolute bottom-0 right-1/3 w-24 h-24 bg-white/5 rounded-full blur-lg"></div>
-
+  <header class="relative bg-linen/95 backdrop-blur-sm shadow-sm border-b border-linen-dark">
     <div class="container mx-auto px-4 relative z-10">
       <div class="flex items-center justify-between py-4">
-        <!-- Logo mejorado -->
+        <!-- Wordmark multicolor (dirección Dannia): one naranja · baby miel · shop azul -->
         <router-link to="/" class="flex items-center gap-3 group">
           <div class="relative">
             <div
-              class="w-10 h-10 bg-gradient-to-br from-white to-yellow-200 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-110"
+              class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-300 transform group-hover:scale-110 border border-linen-dark"
             >
-              <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
+              <svg class="w-6 h-6 text-primary-500" fill="currentColor" viewBox="0 0 24 24">
                 <path
                   d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V21C3 22.11 3.89 23 5 23H19C20.11 23 21 22.11 21 21V9M19 9H14V4H5V21H19V9Z"
                 />
               </svg>
             </div>
             <div
-              class="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full animate-pulse"
+              class="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-secondary-400 to-accent-400 rounded-full animate-pulse"
             ></div>
           </div>
-          <div class="flex flex-col">
-            <span class="font-heading text-2xl font-bold text-white leading-tight">One Baby</span>
-            <span class="font-heading text-white/80 text-sm font-medium">Shop</span>
+          <div class="flex flex-col leading-none">
+            <span class="font-heading text-2xl font-bold tracking-tight">
+              <span class="text-primary-500">One</span>
+              <span class="text-accent-500">Baby</span>
+              <span class="text-dustblue">Shop</span>
+            </span>
+            <span
+              class="font-heading text-ink-soft text-xs font-medium tracking-[0.2em] uppercase mt-0.5"
+              >tienda de bebé</span
+            >
           </div>
         </router-link>
 
         <!-- Navegación Desktop mejorada -->
         <nav class="hidden md:flex space-x-8">
-          <RouterLink
-            to="/"
-            class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+          <RouterLink to="/" class="font-heading text-ink hover:text-primary-600 transition-colors"
             >Inicio</RouterLink
           >
           <RouterLink
             to="/catalog"
-            class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+            class="font-heading text-ink hover:text-primary-600 transition-colors"
             >Catálogo</RouterLink
           >
           <RouterLink
             to="/contact"
-            class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+            class="font-heading text-ink hover:text-primary-600 transition-colors"
             >Contacto</RouterLink
           >
 
@@ -53,12 +51,12 @@
           <template v-if="!userStore.user">
             <RouterLink
               to="/login"
-              class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+              class="font-heading text-ink hover:text-primary-600 transition-colors"
               >Login</RouterLink
             >
             <RouterLink
               to="/register"
-              class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+              class="font-heading text-ink hover:text-primary-600 transition-colors"
               >Registro</RouterLink
             >
           </template>
@@ -67,32 +65,32 @@
           <template v-if="userStore.user">
             <RouterLink
               to="/profile"
-              class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+              class="font-heading text-ink hover:text-primary-600 transition-colors"
               >Perfil</RouterLink
             >
             <RouterLink
               to="/wishlist"
-              class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+              class="font-heading text-ink hover:text-primary-600 transition-colors"
               >Mis Favoritos</RouterLink
             >
             <RouterLink
               to="/checkout"
-              class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+              class="font-heading text-ink hover:text-primary-600 transition-colors"
               >Checkout</RouterLink
             >
             <RouterLink
               to="/orders"
-              class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+              class="font-heading text-ink hover:text-primary-600 transition-colors"
               >Pedidos</RouterLink
             >
             <RouterLink
               to="/admin/login"
-              class="font-heading text-white/90 hover:text-accent-200 transition-colors"
+              class="font-heading text-ink hover:text-primary-600 transition-colors"
               >Admin</RouterLink
             >
             <button
               @click="logout"
-              class="font-heading text-white/90 hover:text-red-200 transition-colors ml-4"
+              class="font-heading text-ink hover:text-red-600 transition-colors ml-4"
             >
               Cerrar sesión
             </button>
@@ -104,11 +102,11 @@
           <!-- Carrito mejorado -->
           <button
             @click="cartStore.open()"
-            class="relative group flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/20"
+            class="relative group flex items-center gap-3 bg-white px-4 py-2 rounded-xl hover:bg-linen-dark transition-all duration-300 border border-linen-dark shadow-sm"
           >
             <div class="relative">
               <svg
-                class="w-6 h-6 text-white group-hover:scale-110 transition-transform duration-300"
+                class="w-6 h-6 text-primary-600 group-hover:scale-110 transition-transform duration-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -121,30 +119,30 @@
                 ></path>
               </svg>
               <div
-                class="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-pink-400 to-purple-500 text-white text-xs rounded-full flex items-center justify-center font-bold animate-pulse"
+                class="absolute -top-1 -right-1 w-5 h-5 bg-accent-500 text-white text-xs rounded-full flex items-center justify-center font-bold animate-pulse"
               >
                 {{ cartStore.count }}
               </div>
             </div>
-            <span class="hidden md:inline text-white font-medium">Carrito</span>
+            <span class="hidden md:inline text-ink font-medium">Carrito</span>
           </button>
 
           <!-- Menú móvil mejorado -->
           <button
             @click="toggleMobileMenu"
-            class="lg:hidden relative p-2 text-white hover:bg-white/10 rounded-xl transition-all duration-300"
+            class="lg:hidden relative p-2 text-ink hover:bg-white rounded-xl transition-all duration-300"
           >
             <div class="w-6 h-6 flex flex-col justify-center items-center gap-1">
               <span
-                class="block w-5 h-0.5 bg-white transition-all duration-300"
+                class="block w-5 h-0.5 bg-ink transition-all duration-300"
                 :class="mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''"
               ></span>
               <span
-                class="block w-5 h-0.5 bg-white transition-all duration-300"
+                class="block w-5 h-0.5 bg-ink transition-all duration-300"
                 :class="mobileMenuOpen ? 'opacity-0' : ''"
               ></span>
               <span
-                class="block w-5 h-0.5 bg-white transition-all duration-300"
+                class="block w-5 h-0.5 bg-ink transition-all duration-300"
                 :class="mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''"
               ></span>
             </div>
@@ -162,10 +160,10 @@
             to="/"
             class="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-purple-50 rounded-xl transition-all duration-300 group"
             @click="mobileMenuOpen = false"
-            active-class="bg-purple-100 text-purple-700"
+            active-class="bg-primary-100 text-primary-700"
           >
             <svg
-              class="w-5 h-5 text-purple-600"
+              class="w-5 h-5 text-primary-600"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -183,10 +181,10 @@
             to="/catalog"
             class="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-purple-50 rounded-xl transition-all duration-300 group"
             @click="mobileMenuOpen = false"
-            active-class="bg-purple-100 text-purple-700"
+            active-class="bg-primary-100 text-primary-700"
           >
             <svg
-              class="w-5 h-5 text-purple-600"
+              class="w-5 h-5 text-primary-600"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -204,10 +202,10 @@
             to="/contact"
             class="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-purple-50 rounded-xl transition-all duration-300 group"
             @click="mobileMenuOpen = false"
-            active-class="bg-purple-100 text-purple-700"
+            active-class="bg-primary-100 text-primary-700"
           >
             <svg
-              class="w-5 h-5 text-purple-600"
+              class="w-5 h-5 text-primary-600"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

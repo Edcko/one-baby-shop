@@ -48,7 +48,7 @@
           <div class="flex-1 max-w-2xl">
             <div class="relative group">
               <div
-                class="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-700 rounded-2xl blur opacity-0 group-hover:opacity-20 transition-all duration-300"
+                class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-700 rounded-2xl blur opacity-0 group-hover:opacity-20 transition-all duration-300"
               ></div>
               <div
                 class="relative bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
@@ -57,11 +57,11 @@
                   v-model="searchQuery"
                   type="text"
                   placeholder="Buscar productos, categorías..."
-                  class="w-full px-6 py-4 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-transparent"
+                  class="w-full px-6 py-4 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-transparent"
                 />
                 <div class="absolute right-4 top-1/2 transform -translate-y-1/2">
                   <svg
-                    class="w-6 h-6 text-purple-600"
+                    class="w-6 h-6 text-primary-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -82,11 +82,11 @@
           <div class="lg:w-64">
             <div class="relative group">
               <div
-                class="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl blur opacity-0 group-hover:opacity-20 transition-all duration-300"
+                class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-700 rounded-xl blur opacity-0 group-hover:opacity-20 transition-all duration-300"
               ></div>
               <select
                 v-model="sortBy"
-                class="relative w-full px-6 py-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none cursor-pointer shadow-lg"
+                class="relative w-full px-6 py-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none cursor-pointer shadow-lg"
               >
                 <option value="name">Nombre A-Z</option>
                 <option value="price-low">Precio: Menor a Mayor</option>
@@ -94,7 +94,7 @@
               </select>
               <div class="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
                 <svg
-                  class="w-5 h-5 text-purple-600"
+                  class="w-5 h-5 text-primary-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -113,7 +113,7 @@
           <!-- Botón de filtros móvil mejorado -->
           <button
             @click="mobileFiltersOpen = !mobileFiltersOpen"
-            class="lg:hidden relative group px-6 py-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-300 shadow-lg transform hover:scale-105"
+            class="lg:hidden relative group px-6 py-4 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all duration-300 shadow-lg transform hover:scale-105"
           >
             <div class="flex items-center gap-2">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -138,7 +138,7 @@
           <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 sticky top-8">
             <div class="flex items-center gap-3 mb-8">
               <div
-                class="w-10 h-10 bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl flex items-center justify-center"
+                class="w-10 h-10 bg-gradient-to-br from-primary-600 to-primary-700 rounded-xl flex items-center justify-center"
               >
                 <svg
                   class="w-5 h-5 text-white"
@@ -161,7 +161,7 @@
             <div class="mb-8">
               <h4 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
                 <svg
-                  class="w-4 h-4 text-purple-600"
+                  class="w-4 h-4 text-primary-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -189,7 +189,7 @@
                       class="sr-only"
                     />
                     <div
-                      class="w-5 h-5 border-2 border-gray-300 rounded-lg flex items-center justify-center group-hover:border-purple-500 transition-all duration-200"
+                      class="w-5 h-5 border-2 border-gray-300 rounded-lg flex items-center justify-center group-hover:border-primary-500 transition-all duration-200"
                     >
                       <svg
                         v-if="selectedCategories.includes(category)"
@@ -206,11 +206,11 @@
                     </div>
                     <div
                       v-if="selectedCategories.includes(category)"
-                      class="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg"
+                      class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-700 rounded-lg"
                     ></div>
                   </div>
                   <span
-                    class="ml-3 text-gray-700 group-hover:text-purple-600 transition-colors duration-200"
+                    class="ml-3 text-gray-700 group-hover:text-primary-600 transition-colors duration-200"
                     >{{ category }}</span
                   >
                 </label>
@@ -221,7 +221,7 @@
             <div class="mb-8">
               <h4 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
                 <svg
-                  class="w-4 h-4 text-purple-600"
+                  class="w-4 h-4 text-primary-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -246,7 +246,7 @@
                 />
                 <div class="flex justify-between items-center">
                   <span class="text-sm text-gray-600">$0</span>
-                  <span class="text-lg font-bold text-purple-600">{{
+                  <span class="text-lg font-bold text-primary-600">{{
                     formatMXN(maxPrice * 100)
                   }}</span>
                   <span class="text-sm text-gray-600">$5,000</span>
@@ -279,7 +279,7 @@
             <div class="flex items-center justify-between">
               <p class="text-gray-600">
                 Mostrando
-                <span class="font-bold text-purple-600">{{ total }}</span> de
+                <span class="font-bold text-primary-600">{{ total }}</span> de
                 <span class="font-bold text-gray-800">{{ products.length }}</span> productos
               </p>
               <div class="flex items-center gap-2 text-sm text-gray-500">
@@ -358,7 +358,7 @@
               <p class="text-gray-600 mb-6">Intenta ajustar tus filtros de búsqueda</p>
               <button
                 @click="clearFilters"
-                class="px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-medium"
+                class="px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all duration-300 font-medium"
               >
                 Limpiar filtros
               </button>
@@ -370,7 +370,7 @@
             <button
               @click="fetchProducts(false)"
               :disabled="loadingMore"
-              class="px-8 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-purple-700 text-white font-bold hover:from-purple-700 hover:to-purple-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              class="px-8 py-3 rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 text-white font-bold hover:from-primary-700 hover:to-primary-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {{ loadingMore ? 'Cargando…' : 'Cargar más productos' }}
             </button>
@@ -415,7 +415,7 @@
             <div>
               <h4 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
                 <svg
-                  class="w-4 h-4 text-purple-600"
+                  class="w-4 h-4 text-primary-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -443,7 +443,7 @@
                       class="sr-only"
                     />
                     <div
-                      class="w-5 h-5 border-2 border-gray-300 rounded-lg flex items-center justify-center group-hover:border-purple-500 transition-all duration-200"
+                      class="w-5 h-5 border-2 border-gray-300 rounded-lg flex items-center justify-center group-hover:border-primary-500 transition-all duration-200"
                     >
                       <svg
                         v-if="selectedCategories.includes(category)"
@@ -460,11 +460,11 @@
                     </div>
                     <div
                       v-if="selectedCategories.includes(category)"
-                      class="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg"
+                      class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-700 rounded-lg"
                     ></div>
                   </div>
                   <span
-                    class="ml-3 text-gray-700 group-hover:text-purple-600 transition-colors duration-200"
+                    class="ml-3 text-gray-700 group-hover:text-primary-600 transition-colors duration-200"
                     >{{ category }}</span
                   >
                 </label>
@@ -475,7 +475,7 @@
             <div>
               <h4 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
                 <svg
-                  class="w-4 h-4 text-purple-600"
+                  class="w-4 h-4 text-primary-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -500,7 +500,7 @@
                 />
                 <div class="flex justify-between items-center">
                   <span class="text-sm text-gray-600">$0</span>
-                  <span class="text-lg font-bold text-purple-600">{{
+                  <span class="text-lg font-bold text-primary-600">{{
                     formatMXN(maxPrice * 100)
                   }}</span>
                   <span class="text-sm text-gray-600">$5,000</span>
@@ -526,7 +526,7 @@
               </button>
               <button
                 @click="mobileFiltersOpen = false"
-                class="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-medium"
+                class="w-full px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all duration-300 font-medium"
               >
                 Aplicar filtros
               </button>

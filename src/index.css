@@ -4,10 +4,9 @@
 @tailwind utilities;
 
 body {
-  /* Warm neutral surface (stone-50). Was brand pastel #F0F4C3 — a background
-     must never carry the brand color at full strength. */
-  background-color: #fafaf9;
-  color: #374151;
+  /* Paleta Lino (dirección de Dannia): fondo neutro beige, tinta cálida */
+  background-color: #f5f0e8;
+  color: #3e3630;
   font-family: 'Nunito', sans-serif;
 }
 

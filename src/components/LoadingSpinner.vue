@@ -3,13 +3,13 @@
     <div class="relative">
       <!-- Spinner principal -->
       <div
-        class="w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin"
+        class="w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin"
       ></div>
 
       <!-- Spinner secundario (opcional) -->
       <div
         v-if="showSecondary"
-        class="absolute inset-0 w-8 h-8 border-4 border-transparent border-t-pink-400 rounded-full animate-spin"
+        class="absolute inset-0 w-8 h-8 border-4 border-transparent border-t-secondary-400 rounded-full animate-spin"
         style="animation-direction: reverse; animation-duration: 1.5s"
       ></div>
     </div>

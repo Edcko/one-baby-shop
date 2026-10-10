@@ -4,7 +4,7 @@
     <button
       @click="toggleDevTools"
       class="bg-gray-800 text-white p-3 rounded-full shadow-lg hover:bg-gray-700 transition-all duration-200"
-      :class="{ 'bg-purple-600': isOpen }"
+      :class="{ 'bg-primary-600': isOpen }"
       title="DevTools"
     >
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

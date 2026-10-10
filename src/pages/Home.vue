@@ -1,28 +1,60 @@
 <template>
   <div class="min-h-screen">
-    <!-- Hero Section -->
-    <section
-      class="relative overflow-hidden bg-gradient-to-br from-primary-700 via-primary-600 to-secondary-600 py-20"
-    >
-      <div class="absolute inset-0 bg-black bg-opacity-10"></div>
-      <div class="container mx-auto px-4 relative z-10">
-        <div class="text-center max-w-4xl mx-auto">
-          <h1 class="font-heading text-6xl md:text-7xl font-bold text-white mb-6 leading-tight">
-            Todo para tu
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-yellow-200"
-              >bebé</span
+    <!-- Hero: el video es la tesis — papás reales doblando ropa de bebé real -->
+    <section class="relative overflow-hidden min-h-[92vh] flex items-center">
+      <div class="absolute inset-0">
+        <video
+          ref="heroVideo"
+          class="w-full h-full object-cover"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          poster="/videos/hero-poster.jpg"
+          aria-hidden="true"
+          tabindex="-1"
+        >
+          <source src="/videos/hero.mp4" type="video/mp4" />
+        </video>
+        <!-- Legibilidad: tinte morado de marca, más denso donde vive el texto -->
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-primary-950/90 via-primary-900/60 to-secondary-900/25"
+        ></div>
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-primary-950/55 via-transparent to-black/10"
+        ></div>
+      </div>
+
+      <div class="container mx-auto px-4 relative z-10 py-28">
+        <div class="max-w-2xl">
+          <span
+            class="hero-rise inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/25 px-4 py-1.5 text-sm font-semibold text-amber-200 mb-6"
+          >
+            🚚 Envío gratis desde $500 MXN
+          </span>
+
+          <h1
+            class="hero-rise font-heading text-5xl md:text-7xl font-bold text-white leading-[1.05] mb-6"
+          >
+            Cada prenda,
+            <span
+              class="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300"
+              >doblada con amor</span
             >
           </h1>
-          <p class="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
-            Descubre productos únicos, seguros y de la más alta calidad para los momentos más
-            especiales de tu bebé
+
+          <p class="hero-rise text-lg md:text-xl text-white/85 leading-relaxed mb-10 max-w-xl">
+            Ropa, pañales y todo lo que tu bebé necesita — elegido con el mismo cuidado con el que
+            lo guardarías tú.
           </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+
+          <div class="hero-rise flex flex-wrap gap-4">
             <router-link
               to="/catalog"
-              class="inline-flex items-center gap-2 bg-white text-purple-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg"
+              class="inline-flex items-center gap-2 bg-white text-primary-700 px-8 py-4 rounded-full font-bold text-lg hover:bg-amber-50 transition-all duration-300 transform hover:scale-105 shadow-xl"
             >
-              <span>Explorar productos</span>
+              Explorar productos
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
@@ -33,15 +65,21 @@
               </svg>
             </router-link>
             <button
-              class="inline-flex items-center gap-2 border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-purple-600 transition-all duration-300"
+              @click="scrollToCategories"
+              class="inline-flex items-center gap-2 border-2 border-white/70 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white/10 transition-all duration-300"
             >
-              <span>Ver ofertas</span>
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              Ver categorías
+              <svg
+                class="w-5 h-5 animate-bounce-soft"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                  d="M19 14l-7 7m0 0l-7-7m7 7V3"
                 ></path>
               </svg>
             </button>
@@ -49,18 +87,17 @@
         </div>
       </div>
 
-      <!-- Elementos decorativos -->
-      <div class="absolute top-10 left-10 w-20 h-20 bg-white/20 rounded-full animate-pulse"></div>
+      <!-- Indicador de scroll -->
       <div
-        class="absolute bottom-20 right-20 w-32 h-32 bg-white/10 rounded-full animate-pulse delay-1000"
-      ></div>
-      <div
-        class="absolute top-1/2 left-1/4 w-16 h-16 bg-white/15 rounded-full animate-bounce"
-      ></div>
+        class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-white/60 text-xs tracking-widest uppercase"
+      >
+        desliza
+        <div class="mx-auto mt-2 w-px h-8 bg-gradient-to-b from-white/60 to-transparent"></div>
+      </div>
     </section>
 
     <!-- Categorías destacadas -->
-    <section class="py-16 bg-white">
+    <section id="categorias" class="py-16 bg-white">
       <div class="container mx-auto px-4">
         <div class="text-center mb-12">
           <h2 class="font-heading text-4xl font-bold text-gray-800 mb-4">Categorías populares</h2>
@@ -333,6 +370,26 @@ import { formatMXN } from '@/utils/money'
 const cartStore = useCartStore()
 const toastStore = useToastStore()
 
+// Hero video — real people folding real baby clothes (Coverr, free license)
+const heroVideo = ref(null)
+
+function scrollToCategories() {
+  document.getElementById('categorias')?.scrollIntoView({ behavior: 'smooth' })
+}
+
+onMounted(() => {
+  // Autoplay is a luxury, not a requirement: users with reduced motion or
+  // metered connections get the (nice) poster instead of the video.
+  const video = heroVideo.value
+  if (!video) return
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const saveData = navigator.connection?.saveData === true
+  if (reducedMotion || saveData) {
+    video.removeAttribute('autoplay')
+    video.pause()
+  }
+})
+
 // Catálogo desde la API (F4) — se muestra lo que hay en la base de datos.
 const categories = ref([])
 const featuredProducts = ref([])
@@ -403,4 +460,52 @@ const benefits = ref([
 .delay-1000 {
   animation-delay: 1s;
 }
+</style>
+
+<style scoped>
+/* Entrada orquestada del hero: una sola secuencia, luego calma. */
+.hero-rise {
+  animation: heroRise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.hero-rise:nth-of-type(1) {
+  animation-delay: 0.05s;
+}
+
+/* Delays escalonados por elemento (badge → título → texto → botones) */
+h1.hero-rise {
+  animation-delay: 0.18s;
+}
+p.hero-rise {
+  animation-delay: 0.34s;
+}
+div.hero-rise {
+  animation-delay: 0.5s;
+}
+
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* El video respira ligeramente al hacer scroll — sutil, no circo */
+@keyframes bounce-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+.animate-bounce-soft {
+  animation: bounce-soft 2.2s ease-in-out infinite;
+}
+
+/* prefers-reduced-motion ya está cubierto globalmente (duración 0.01ms) */
 </style>

@@ -47,3 +47,6 @@ Thumbs.db
 *.temp
 # Backend — Prisma generated client (regenerated with `prisma generate`)
 backend/generated/
+
+# Video candidates for review (never committed — chosen one gets optimized into public/videos)
+video-candidatos/

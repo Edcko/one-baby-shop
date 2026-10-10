@@ -58,6 +58,10 @@ export default {
         primary: terracotta,
         secondary: olive,
         accent: honey,
+        // Alias explícitos: las clases olive-*/terracotta-* SÍ existen
+        // (un token sin alias = clase fantasma que Tailwind no genera)
+        terracotta,
+        olive,
         // Fondos y tinta de la paleta Lino
         linen: { DEFAULT: '#F5F0E8', dark: '#EAE2D4' },
         ink: { DEFAULT: '#3E3630', soft: '#6B6157', light: '#9C9186' },

@@ -97,32 +97,83 @@
       </div>
     </section>
 
-    <!-- Categorías destacadas -->
-    <section id="categorias" class="py-16 bg-white">
-      <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-          <h2 class="font-heading text-4xl font-bold text-gray-800 mb-4">Categorías populares</h2>
-          <p class="text-gray-600 text-lg">
-            Encuentra todo lo que necesitas organizado por categorías
-          </p>
+    <!-- Ola: el video se funde con el lino -->
+    <div class="-mt-px relative -mb-1" aria-hidden="true">
+      <svg
+        viewBox="0 0 1440 90"
+        class="w-full h-[70px] block -translate-y-px"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M0,50 C240,95 480,0 720,35 C960,70 1200,20 1440,55 L1440,90 L0,90 Z"
+          fill="#F5F0E8"
+        />
+      </svg>
+    </div>
+
+    <!-- Categorías: foto contextual + acento por paleta + reveal -->
+    <section id="categorias" class="relative py-20 bg-linen overflow-hidden">
+      <!-- blobs decorativos de paleta -->
+      <div
+        class="absolute -top-20 -left-24 w-80 h-80 rounded-full bg-terracotta-200/40 blur-3xl float-slow"
+        aria-hidden="true"
+      ></div>
+      <div
+        class="absolute -bottom-24 -right-20 w-96 h-96 rounded-full bg-olive-200/40 blur-3xl float-slow-rev"
+        aria-hidden="true"
+      ></div>
+
+      <div class="container mx-auto px-4 relative">
+        <div class="text-center mb-14" v-reveal>
+          <span
+            class="inline-block text-xs font-bold tracking-[0.25em] uppercase text-primary-600 mb-3"
+            >explora</span
+          >
+          <h2 class="font-heading text-4xl md:text-5xl font-bold text-ink mb-4">
+            Categorías populares
+          </h2>
+          <p class="text-ink-soft text-lg">Todo lo que necesitas, organizado por categorías</p>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div
-            v-for="(category, index) in categories"
-            :key="index"
-            class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-secondary-500 to-primary-500 p-6 text-center cursor-pointer transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-2xl"
+        <div class="grid grid-cols-2 lg:grid-cols-3 gap-5 md:gap-7">
+          <router-link
+            v-for="(category, index) in categoryCards"
+            :key="category.slug"
+            v-reveal="index * 90"
+            :to="`/catalog?category=${category.slug}`"
+            class="group relative overflow-hidden rounded-3xl aspect-[4/5] shadow-lg hover:shadow-2xl transition-shadow duration-500 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-400"
           >
+            <img
+              v-if="category.image"
+              :src="category.image"
+              :alt="category.name"
+              loading="lazy"
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-110"
+            />
+            <!-- velo de acento por categoría -->
             <div
-              class="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-30 transition-all duration-300"
+              class="absolute inset-0 bg-gradient-to-t transition-opacity duration-500 group-hover:opacity-90"
+              :class="category.overlay"
             ></div>
-            <div class="relative z-10">
-              <div
-                class="w-16 h-16 mx-auto mb-4 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-110"
+
+            <!-- contador en glass -->
+            <span
+              class="absolute top-4 right-4 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-bold border border-white/30"
+            >
+              {{ category.productCount }}
+              {{ category.productCount === 1 ? 'producto' : 'productos' }}
+            </span>
+
+            <div class="absolute bottom-0 left-0 right-0 p-5 md:p-6">
+              <h3 class="font-heading text-2xl font-bold text-white drop-shadow-md">
+                {{ category.name }}
+              </h3>
+              <p
+                class="flex items-center gap-2 text-sm text-white/90 font-semibold mt-1 transition-all duration-300 group-hover:gap-3.5"
               >
+                Ver productos
                 <svg
-                  v-if="category.name === 'Pañales'"
-                  class="w-8 h-8 text-white drop-shadow-lg"
+                  class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -130,78 +181,57 @@
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
+                    stroke-width="2.5"
+                    d="M5 12h14m0 0l-6-6m6 6l-6 6"
+                  ></path>
                 </svg>
-                <svg
-                  v-else-if="category.name === 'Ropa'"
-                  class="w-8 h-8 text-white drop-shadow-lg"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                  />
-                </svg>
-                <svg
-                  v-else-if="category.name === 'Juguetes'"
-                  class="w-8 h-8 text-white drop-shadow-lg"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <svg
-                  v-else
-                  class="w-8 h-8 text-white drop-shadow-lg"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                  />
-                </svg>
-              </div>
-              <h3 class="font-heading text-xl font-bold text-white mb-2">{{ category.name }}</h3>
-              <p class="text-white/80 text-sm">{{ category.productCount }} productos</p>
+              </p>
             </div>
-            <!-- Efecto de brillo -->
-            <div
-              class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"
-            ></div>
-          </div>
+          </router-link>
         </div>
       </div>
     </section>
 
     <!-- Productos destacados -->
-    <section class="py-16 bg-gradient-to-b from-gray-50 to-white">
+    <section class="relative py-20 bg-white/60">
       <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-          <h2 class="font-heading text-4xl font-bold text-gray-800 mb-4">Productos destacados</h2>
-          <p class="text-gray-600 text-lg">Los favoritos de nuestros clientes</p>
+        <div class="flex flex-wrap items-end justify-between gap-4 mb-12" v-reveal>
+          <div>
+            <span
+              class="inline-block text-xs font-bold tracking-[0.25em] uppercase text-accent-600 mb-3"
+              >los favoritos</span
+            >
+            <h2 class="font-heading text-4xl md:text-5xl font-bold text-ink">
+              Productos destacados
+            </h2>
+          </div>
+          <router-link
+            to="/catalog"
+            class="group inline-flex items-center gap-2 font-bold text-primary-600 hover:text-primary-700"
+          >
+            Ver todo
+            <svg
+              class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2.5"
+                d="M5 12h14m0 0l-6-6m6 6l-6 6"
+              ></path>
+            </svg>
+          </router-link>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
           <div
             v-for="(product, index) in featuredProducts"
             :key="index"
-            class="group bg-white rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300 hover:shadow-2xl"
+            v-reveal="index * 110"
+            class="group bg-white rounded-3xl shadow-md hover:shadow-2xl overflow-hidden transform hover:-translate-y-2 transition-all duration-500 border border-linen-dark/60"
           >
             <div class="relative overflow-hidden">
               <img
@@ -209,22 +239,25 @@
                 :alt="product.name"
                 class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
               />
-              <div class="absolute top-4 right-4">
-                <div
+              <div class="absolute top-4 right-4 flex flex-col gap-2">
+                <span
                   v-if="discountOf(product)"
-                  class="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold"
+                  class="bg-primary-500 text-white text-xs px-3 py-1 rounded-full font-bold shadow-lg"
                 >
                   -{{ discountOf(product) }}%
-                </div>
+                </span>
+                <span class="bg-accent-400 text-ink text-xs px-3 py-1 rounded-full font-bold shadow"
+                  >★ destacado</span
+                >
               </div>
             </div>
 
             <div class="p-6">
               <div class="flex items-center justify-between mb-2">
                 <span class="text-xs text-primary-600 font-medium uppercase tracking-wide">{{
-                  product.category
+                  product.category?.name
                 }}</span>
-                <div class="flex text-yellow-400">
+                <div class="flex text-accent-400">
                   <svg
                     v-for="star in 5"
                     :key="star"
@@ -277,84 +310,25 @@
       </div>
     </section>
 
-    <!-- Sección de beneficios -->
-    <section class="py-16 bg-gradient-to-br from-primary to-secondary">
-      <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-          <h2 class="font-heading text-4xl font-bold text-gray-800 mb-4">¿Por qué elegirnos?</h2>
-          <p class="text-gray-700 text-lg">Ofrecemos la mejor experiencia para tu bebé</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div v-for="(benefit, index) in benefits" :key="index" class="text-center group">
-            <div class="relative w-24 h-24 mx-auto mb-6">
-              <div
-                class="absolute inset-0 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-all duration-300"
-              ></div>
-              <div
-                class="relative bg-gradient-to-br from-white to-gray-50 rounded-full flex items-center justify-center shadow-xl group-hover:shadow-2xl transition-all duration-300 transform group-hover:scale-110 border border-white/20"
-              >
-                <svg
-                  v-if="benefit.title === 'Envío Gratis'"
-                  class="w-12 h-12 text-primary-600 drop-shadow-sm"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"
-                  />
-                </svg>
-                <svg
-                  v-else-if="benefit.title === 'Garantía de Calidad'"
-                  class="w-12 h-12 text-primary-600 drop-shadow-sm"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                  />
-                </svg>
-                <svg
-                  v-else
-                  class="w-12 h-12 text-primary-600 drop-shadow-sm"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"
-                  />
-                </svg>
-              </div>
-              <!-- Efecto de brillo -->
-              <div
-                class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 rounded-full"
-              ></div>
-            </div>
-            <h3
-              class="font-heading text-xl font-bold text-gray-800 mb-3 group-hover:text-primary-700 transition-colors duration-300"
-            >
-              {{ benefit.title }}
-            </h3>
-            <p class="text-gray-700 leading-relaxed">{{ benefit.description }}</p>
-          </div>
+    <!-- Marquee de beneficios — ritmo distinto, mismo mensaje -->
+    <section class="relative py-4 bg-olive-700 overflow-hidden" aria-label="Beneficios">
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-olive-800 via-olive-700 to-olive-800"
+      ></div>
+      <div class="marquee-track relative flex gap-0 whitespace-nowrap">
+        <div
+          v-for="copy in [0, 1]"
+          :key="copy"
+          class="flex items-center gap-3 px-5 shrink-0"
+          :aria-hidden="copy === 1"
+        >
+          <template v-for="(benefit, index) in benefits" :key="index">
+            <span class="flex items-center gap-3 text-white/95 font-heading font-semibold text-lg">
+              <span class="w-2.5 h-2.5 rounded-full bg-accent-400"></span>
+              {{ benefit.title }} — {{ benefit.description }}
+            </span>
+            <span class="text-accent-300/70 text-xl px-2" aria-hidden="true">✦</span>
+          </template>
         </div>
       </div>
     </section>
@@ -362,7 +336,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { api } from '@/services/api'
 import { useCartStore } from '@/store/cart'
 import { useToastStore } from '@/store/toast'
@@ -410,6 +384,26 @@ const addToCart = async (product) => {
   )
 }
 
+// Acento por categoría (paleta Lino): velo con el color de su familia
+const ACCENTS = {
+  panales: 'from-primary-800/90 via-primary-600/45 to-transparent',
+  ropa: 'from-accent-700/90 via-accent-500/40 to-transparent',
+  juguetes: 'from-dustblue-dark/90 via-dustblue/45 to-transparent',
+  alimentacion: 'from-olive-700/90 via-olive-500/45 to-transparent',
+  higiene: 'from-ink/90 via-ink-soft/45 to-transparent',
+}
+
+const categoryCards = computed(() =>
+  categories.value.map((cat) => ({
+    ...cat,
+    image: catImages.value[cat.slug] ?? null,
+    overlay: ACCENTS[cat.slug] ?? 'from-primary-800/90 via-primary-600/45 to-transparent',
+  }))
+)
+
+// La foto de cada categoría = la de su primer producto (contexto real)
+const catImages = ref({})
+
 onMounted(async () => {
   const [featured, cats] = await Promise.all([
     api('/products?featured=true&limit=4&sort=createdAt&order=desc'),
@@ -417,6 +411,16 @@ onMounted(async () => {
   ])
   if (featured.ok) featuredProducts.value = featured.data.data.products
   if (cats.ok) categories.value = cats.data.data.categories
+
+  // Una mini-petición por categoría para su imagen representativa
+  for (const cat of categories.value) {
+    api(`/products?category=${cat.slug}&limit=1`).then((response) => {
+      if (response.ok) {
+        const first = response.data.data.products[0]
+        if (first?.image) catImages.value = { ...catImages.value, [cat.slug]: first.image }
+      }
+    })
+  }
 })
 
 const benefits = ref([
@@ -509,4 +513,51 @@ div.hero-rise {
 }
 
 /* prefers-reduced-motion ya está cubierto globalmente (duración 0.01ms) */
+</style>
+
+<style scoped>
+/* ── Scroll reveal (v-reveal) ─────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Blobs flotantes de fondo ─────────────────────────────────────── */
+@keyframes floatSlow {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(24px, -18px) scale(1.06);
+  }
+}
+.float-slow {
+  animation: floatSlow 14s ease-in-out infinite;
+}
+.float-slow-rev {
+  animation: floatSlow 17s ease-in-out infinite reverse;
+}
+
+/* ── Marquee de beneficios ────────────────────────────────────────── */
+.marquee-track {
+  animation: marqueeScroll 28s linear infinite;
+  width: max-content;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+@keyframes marqueeScroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
 </style>

@@ -540,6 +540,7 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useToastStore } from '@/store/toast'
 import { useCartStore } from '@/store/cart'
 import { api } from '@/services/api'
@@ -557,6 +558,7 @@ const sortBy = ref('name')
 const mobileFiltersOpen = ref(false)
 const toastStore = useToastStore()
 const cartStore = useCartStore()
+const route = useRoute()
 
 const products = ref([])
 const categories = ref([])
@@ -627,6 +629,11 @@ watch(
 )
 
 onMounted(() => {
+  // Deep-link desde las tarjetas de categoría de la home: /catalog?category=ropa
+  const incoming = route.query.category
+  if (typeof incoming === 'string' && incoming) {
+    selectedCategories.value = incoming.split(',').filter(Boolean)
+  }
   fetchProducts(true)
   fetchCategories()
 })

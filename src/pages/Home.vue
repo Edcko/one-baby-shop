@@ -246,9 +246,6 @@
                 >
                   -{{ discountOf(product) }}%
                 </span>
-                <span class="bg-accent-400 text-ink text-xs px-3 py-1 rounded-full font-bold shadow"
-                  >★ destacado</span
-                >
               </div>
             </div>
 

@@ -38,16 +38,16 @@
           <h1
             class="hero-rise font-heading text-5xl md:text-7xl font-bold text-white leading-[1.05] mb-6"
           >
-            Cada prenda,
+            Cada prenda seleccionada
             <span
               class="text-transparent bg-clip-text bg-gradient-to-r from-accent-200 via-accent-100 to-accent-300"
-              >doblada con amor</span
+              >con amor</span
             >
           </h1>
 
           <p class="hero-rise text-lg md:text-xl text-white/85 leading-relaxed mb-10 max-w-xl">
-            Ropa, pañales y todo lo que tu bebé necesita — elegido con el mismo cuidado con el que
-            lo guardarías tú.
+            Suavidad, calidez y ternura pensadas para que tu bebé se sienta cómodo, seguro y
+            apapachado.
           </p>
 
           <div class="hero-rise flex flex-wrap gap-4">
@@ -386,8 +386,6 @@ const ACCENTS = {
   panales: 'from-primary-800/90 via-primary-600/45 to-transparent',
   ropa: 'from-accent-700/90 via-accent-500/40 to-transparent',
   juguetes: 'from-dustblue-dark/90 via-dustblue/45 to-transparent',
-  alimentacion: 'from-olive-700/90 via-olive-500/45 to-transparent',
-  higiene: 'from-ink/90 via-ink-soft/45 to-transparent',
 }
 
 const categoryCards = computed(() =>

@@ -65,23 +65,23 @@ describe('GET /api/v1/products', () => {
   it('filters by category slug', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: '/api/v1/products?category=higiene',
+      url: '/api/v1/products?category=ropa',
     })
     const body = response.json()
     expect(body.success).toBe(true)
     for (const product of body.data.products) {
-      expect(product.category.slug).toBe('higiene')
+      expect(product.category.slug).toBe('ropa')
     }
   })
 
-  it('searches accent-insensitively (biberon finds Biberón)', async () => {
+  it('searches accent-insensitively (panales finds Pañales)', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: '/api/v1/products?search=biberon',
+      url: '/api/v1/products?search=panales',
     })
     const body = response.json()
     expect(body.data.pagination.total).toBeGreaterThanOrEqual(1)
-    expect(body.data.products[0].name).toContain('Biberón')
+    expect(body.data.products[0].name).toContain('Pañales')
   })
 
   it('sorts by price ascending', async () => {
@@ -143,7 +143,7 @@ describe('GET /api/v1/categories', () => {
     const response = await app.inject({ method: 'GET', url: '/api/v1/categories' })
     expect(response.statusCode).toBe(200)
     const body = response.json()
-    expect(body.data.categories.length).toBeGreaterThanOrEqual(5)
+    expect(body.data.categories.length).toBeGreaterThanOrEqual(3)
     for (const category of body.data.categories) {
       expect(typeof category.productCount).toBe('number')
     }

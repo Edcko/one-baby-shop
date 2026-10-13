@@ -156,9 +156,9 @@ describe('admin order fulfillment', () => {
       payload: { firstName: 'A', lastName: 'B', email, password: 'prueba123' },
     })
     const token = reg.json().data.accessToken
-    // Este archivo es dueño de 'toallitas-humedas' (stock determinista)
+    // Este test es dueño de 'panales-premium' (stock determinista)
     const product = (
-      await app.inject({ method: 'GET', url: '/api/v1/products/toallitas-humedas' })
+      await app.inject({ method: 'GET', url: '/api/v1/products/panales-premium' })
     ).json().data
     await app.prisma.product.update({
       where: { id: product.id },

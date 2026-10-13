@@ -60,27 +60,6 @@ const seedProducts: {
     featured: true,
   },
   {
-    name: 'Biberón Anti-cólicos',
-    slug: 'biberon-anticolicos',
-    description: 'Biberón con sistema anti-cólicos y anti-reflujo',
-    priceCents: 1875,
-    categorySlug: 'alimentacion',
-    sku: 'ALI-004',
-    stock: 35,
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=600&fit=crop',
-    featured: true,
-  },
-  {
-    name: 'Toallitas Húmedas',
-    slug: 'toallitas-humedas',
-    description: 'Pack de 80 toallitas hipoalergénicas sin fragancia',
-    priceCents: 1299,
-    categorySlug: 'higiene',
-    sku: 'HIG-005',
-    stock: 50,
-    image: 'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=600&h=600&fit=crop',
-  },
-  {
     name: 'Manta de Algodón',
     slug: 'manta-de-algodon',
     description: 'Manta suave y cálida para arrullar a tu bebé',
@@ -99,16 +78,7 @@ const seedProducts: {
     sku: 'JUG-007',
     stock: 28,
     image: 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=600&h=600&fit=crop',
-  },
-  {
-    name: 'Crema para Pañal',
-    slug: 'crema-para-panal',
-    description: 'Crema protectora para prevenir irritaciones',
-    priceCents: 899,
-    categorySlug: 'higiene',
-    sku: 'HIG-008',
-    stock: 45,
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=600&fit=crop',
+    featured: true,
   },
 ]
 
@@ -119,9 +89,21 @@ async function main() {
     { name: 'Pañales', slug: 'panales', sortOrder: 1 },
     { name: 'Ropa', slug: 'ropa', sortOrder: 2 },
     { name: 'Juguetes', slug: 'juguetes', sortOrder: 3 },
-    { name: 'Alimentación', slug: 'alimentacion', sortOrder: 4 },
-    { name: 'Higiene', slug: 'higiene', sortOrder: 5 },
   ]
+
+  // Categorías retiradas por dirección de producto (Dannia, 2026-10-13):
+  // enfocar el catálogo en ropa, pañales y juguetes. Se retiran sus productos
+  // primero (Product.categoryId es ON DELETE RESTRICT) y luego las categorías.
+  // CartItem cascades away; pedidos históricos conservan la línea (SET NULL).
+  const retiredCategorySlugs = ['alimentacion', 'higiene']
+  for (const slug of retiredCategorySlugs) {
+    const retired = await prisma.category.findUnique({ where: { slug } })
+    if (retired) {
+      await prisma.product.deleteMany({ where: { categoryId: retired.id } })
+      await prisma.category.delete({ where: { id: retired.id } })
+      console.log(`🧹 Categoría retirada: ${retired.name}`)
+    }
+  }
 
   for (const category of categories) {
     await prisma.category.upsert({
